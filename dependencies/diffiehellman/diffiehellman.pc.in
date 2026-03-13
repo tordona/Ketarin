@@ -1,0 +1,6 @@
+Name: @ASSEMBLY_TITLE@
+Description: @ASSEMBLY_DESCRIPTION@
+Version: @ASSEMBLY_VERSION@
+
+Requires: 
+Libs: -r:@libdir@/mono/@ASSEMBLY_PACKAGE@/DiffieHellman.dll

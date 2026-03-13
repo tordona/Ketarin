@@ -1,0 +1,43 @@
+Name:		@ASSEMBLY_SHORT@
+Version:	@ASSEMBLY_RELEASE@
+Release:	@ASSEMBLY_BUILD@%{?dist}
+Summary:	@ASSEMBLY_SUMMARY@
+
+Group:		Development/Libraries
+License:	MIT X11
+URL:		http://www.mentalis.org/soft/class.qpx?id=15
+Source0:	@ASSEMBLY_SHORT@-@ASSEMBLY_RELEASE@.tar.bz2
+BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+
+BuildRequires:	/usr/bin/mcs
+BuildRequires:	/usr/bin/gacutil
+Requires:	mono-core
+
+%description
+@ASSEMBLY_LONG_DESCRIPTION@
+
+%prep
+%setup -q
+
+
+%build
+%configure
+make
+
+
+%install
+rm -rf $RPM_BUILD_ROOT
+make install DESTDIR=$RPM_BUILD_ROOT
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(-,root,root,-)
+%doc license.txt Org.Mentalis.Security.Cryptography.chm
+%{_libdir}/mono
+%{_libdir}/pkgconfig/@ASSEMBLY_SHORT@.pc
+
+%changelog
+* Mon Apr 25 2011 Maik Greubel <greubel@nkey.de> 1.0.0.0
+- The initial version of package

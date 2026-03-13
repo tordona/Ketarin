@@ -1,0 +1,7 @@
+﻿using System.Reflection;
+
+[assembly: AssemblyTitle("@ASSEMBLY_SHORT@")]
+[assembly: AssemblyDescription("@ASSEMBLY_DESCRIPTION@")]
+[assembly: AssemblyDelaySign(false)]
+[assembly: AssemblyKeyFile("@ASSEMBLY_KEYFILE@")]
+[assembly: AssemblyVersion("@ASSEMBLY_VERSION@")]
