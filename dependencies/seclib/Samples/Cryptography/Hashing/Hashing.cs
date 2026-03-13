@@ -20,9 +20,9 @@ class Hashing {
 		PrintHash("MD2 hash:       ", new MD2CryptoServiceProvider(), data);
 		PrintHash("MD5 hash:       ", new MD5CryptoServiceProvider(), data);
 		PrintHash("SHA1 hash:      ", new SHA1CryptoServiceProvider(), data);
-		PrintHash("RIPEMD160 hash: ", new RIPEMD160Managed(), data);
-		PrintHash("HMAC-MD5 hash:  ", new HMAC(new MD5CryptoServiceProvider(), key), data);
-		PrintHash("HMAC-SHA1 hash: ", new HMAC(new SHA1CryptoServiceProvider(), key), data);
+		PrintHash("RIPEMD160 hash: ", new Org.Mentalis.Security.Cryptography.RIPEMD160Managed(), data);
+		PrintHash("HMAC-MD5 hash:  ", new Org.Mentalis.Security.Cryptography.HMAC(new MD5CryptoServiceProvider(), key), data);
+		PrintHash("HMAC-SHA1 hash: ", new Org.Mentalis.Security.Cryptography.HMAC(new SHA1CryptoServiceProvider(), key), data);
 		
 		Console.WriteLine("\r\nPress ENTER to continue...");
 		Console.ReadLine();

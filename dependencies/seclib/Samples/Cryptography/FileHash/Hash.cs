@@ -12,7 +12,7 @@ public class Hash {
 		}
 		HashAlgorithm[] hashes = new HashAlgorithm[] {
 				new MD2CryptoServiceProvider(), new MD5CryptoServiceProvider(),
-				new SHA1CryptoServiceProvider(), new RIPEMD160Managed()
+				new SHA1CryptoServiceProvider(), new Org.Mentalis.Security.Cryptography.RIPEMD160Managed()
 			};
 		string[] names = new string[] {"MD2:       ", "MD5:       ", "SHA1:      ", "RIPEMD160: "};
 		byte[] buffer = new byte[4096];

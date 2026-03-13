@@ -13,7 +13,7 @@ namespace Org.Mentalis.Security.Testing {
 			}
 		}
 		protected override HashAlgorithm GetHashInstance() {
-			return new HMAC(new MD5CryptoServiceProvider());
+			return new Org.Mentalis.Security.Cryptography.HMAC(new MD5CryptoServiceProvider());
 		}
 		protected override byte[][][] GetTestVectors() {
 			return new byte[][][] {hash1, hash2, hash3};

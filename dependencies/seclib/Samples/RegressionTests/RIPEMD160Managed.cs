@@ -14,7 +14,7 @@ namespace Org.Mentalis.Security.Testing {
 			}
 		}
 		protected override HashAlgorithm GetHashInstance() {
-			return new RIPEMD160Managed();
+			return new Org.Mentalis.Security.Cryptography.RIPEMD160Managed();
 		}
 		protected override byte[][][] GetTestVectors() {
 			return new byte[][][] {hash1, hash2, hash3, hash4, hash5, hash6, hash7, hash8};
