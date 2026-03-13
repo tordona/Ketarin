@@ -20,7 +20,32 @@
     <SQLiteNetDir>$(MSBuildProjectDirectory)\..</SQLiteNetDir>
     <NetFx47>true</NetFx47>
     <ConfigurationYear>2017</ConfigurationYear>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_47;COUNT_HANDLE;TRACK_MEMORY_BYTES;USE_INTEROP_DLL;USE_PREPARE_V2;THROW_ON_DISPOSED;PRELOAD_NATIVE_LIBRARY;INTEROP_COMPRESS_EXTENSION;INTEROP_DEBUG;INTEROP_EXTENSION_FUNCTIONS;INTEROP_FTS5_EXTENSION;INTEROP_JSON1_EXTENSION;INTEROP_LOG;INTEROP_PERCENTILE_EXTENSION;INTEROP_REGEXP_EXTENSION;INTEROP_SHA1_EXTENSION;INTEROP_SHA3_EXTENSION;INTEROP_TEST_EXTENSION;INTEROP_TOTYPE_EXTENSION;INTEROP_VIRTUAL_TABLE;INTEROP_ZIPFILE_EXTENSION;INTEROP_SESSION_EXTENSION;TRACE_CONNECTION;TRACE_DETECTION;TRACE_PRELOAD;TRACE_SHARED;TRACE_WARNING;WINDOWS</DefineConstants>
+    <DocumentationFile>..\bin\2017\Debug\bin\System.Data.SQLite.xml</DocumentationFile>
+    <NoWarn>618,1591;3001</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM64'">
+    <OutputPath>bin\ARM64\Release\</OutputPath>
+    <DefineConstants>TRACE;NET_47;COUNT_HANDLE;TRACK_MEMORY_BYTES;USE_INTEROP_DLL;USE_PREPARE_V2;THROW_ON_DISPOSED;PRELOAD_NATIVE_LIBRARY;INTEROP_COMPRESS_EXTENSION;INTEROP_EXTENSION_FUNCTIONS;INTEROP_FTS5_EXTENSION;INTEROP_JSON1_EXTENSION;INTEROP_PERCENTILE_EXTENSION;INTEROP_REGEXP_EXTENSION;INTEROP_SHA1_EXTENSION;INTEROP_SHA3_EXTENSION;INTEROP_TOTYPE_EXTENSION;INTEROP_VIRTUAL_TABLE;INTEROP_ZIPFILE_EXTENSION;INTEROP_SESSION_EXTENSION;TRACE_CONNECTION;TRACE_DETECTION;TRACE_PRELOAD;TRACE_SHARED;TRACE_WARNING;WINDOWS</DefineConstants>
+    <DocumentationFile>..\bin\2017\Release\bin\System.Data.SQLite.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>618,1591;3001</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <Import Project="$(SQLiteNetDir)\Targets\SQLite.NET.Platform.Settings.targets" />
   <Import Project="$(SQLiteNetDir)\Targets\SQLite.NET.Settings.targets" />
@@ -29,14 +54,14 @@
     <OutputPath>$(BinaryOutputPath)</OutputPath>
     <DocumentationFile>$(BinaryOutputPath)System.Data.SQLite.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
