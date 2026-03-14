@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ *
+ * System.Data.SQLite.2017.csproj -
+ *
+ * Written by Joe Mistachkin.
+ * Released to the public domain, use at your own risk!
+ *
+-->
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AC139952-261A-4463-B6FA-AEBC25283A66}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.Data.SQLite</RootNamespace>
+    <AssemblyName>System.Data.SQLite</AssemblyName>
+    <SQLiteNetDir>$(MSBuildProjectDirectory)\..</SQLiteNetDir>
+    <NetFx47>true</NetFx47>
+    <ConfigurationYear>2017</ConfigurationYear>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\2026\Debug\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_47;COUNT_HANDLE;TRACK_MEMORY_BYTES;USE_INTEROP_DLL;USE_PREPARE_V2;THROW_ON_DISPOSED;PRELOAD_NATIVE_LIBRARY;INTEROP_COMPRESS_EXTENSION;INTEROP_DEBUG;INTEROP_EXTENSION_FUNCTIONS;INTEROP_FTS5_EXTENSION;INTEROP_JSON1_EXTENSION;INTEROP_LOG;INTEROP_PERCENTILE_EXTENSION;INTEROP_REGEXP_EXTENSION;INTEROP_SHA1_EXTENSION;INTEROP_SHA3_EXTENSION;INTEROP_TEST_EXTENSION;INTEROP_TOTYPE_EXTENSION;INTEROP_VIRTUAL_TABLE;INTEROP_ZIPFILE_EXTENSION;INTEROP_SESSION_EXTENSION;TRACE_CONNECTION;TRACE_DETECTION;TRACE_PRELOAD;TRACE_SHARED;TRACE_WARNING;WINDOWS</DefineConstants>
+    <DocumentationFile>..\bin\2026\Debug\bin\System.Data.SQLite.xml</DocumentationFile>
+    <NoWarn>618,1591;3001</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM64'">
+    <OutputPath>..\bin\2026\Release\bin\</OutputPath>
+    <DefineConstants>TRACE;NET_47;COUNT_HANDLE;TRACK_MEMORY_BYTES;USE_INTEROP_DLL;USE_PREPARE_V2;THROW_ON_DISPOSED;PRELOAD_NATIVE_LIBRARY;INTEROP_COMPRESS_EXTENSION;INTEROP_EXTENSION_FUNCTIONS;INTEROP_FTS5_EXTENSION;INTEROP_JSON1_EXTENSION;INTEROP_PERCENTILE_EXTENSION;INTEROP_REGEXP_EXTENSION;INTEROP_SHA1_EXTENSION;INTEROP_SHA3_EXTENSION;INTEROP_TOTYPE_EXTENSION;INTEROP_VIRTUAL_TABLE;INTEROP_ZIPFILE_EXTENSION;INTEROP_SESSION_EXTENSION;TRACE_CONNECTION;TRACE_DETECTION;TRACE_PRELOAD;TRACE_SHARED;TRACE_WARNING;WINDOWS</DefineConstants>
+    <DocumentationFile>..\bin\2026\Release\bin\System.Data.SQLite.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>618,1591;3001</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\2026\Debug\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET_47;COUNT_HANDLE;TRACK_MEMORY_BYTES;USE_INTEROP_DLL;USE_PREPARE_V2;THROW_ON_DISPOSED;PRELOAD_NATIVE_LIBRARY;INTEROP_COMPRESS_EXTENSION;INTEROP_DEBUG;INTEROP_EXTENSION_FUNCTIONS;INTEROP_FTS5_EXTENSION;INTEROP_JSON1_EXTENSION;INTEROP_LOG;INTEROP_PERCENTILE_EXTENSION;INTEROP_REGEXP_EXTENSION;INTEROP_SHA1_EXTENSION;INTEROP_SHA3_EXTENSION;INTEROP_TEST_EXTENSION;INTEROP_TOTYPE_EXTENSION;INTEROP_VIRTUAL_TABLE;INTEROP_ZIPFILE_EXTENSION;INTEROP_SESSION_EXTENSION;TRACE_CONNECTION;TRACE_DETECTION;TRACE_PRELOAD;TRACE_SHARED;TRACE_WARNING;WINDOWS;NET_47;COUNT_HANDLE;TRACK_MEMORY_BYTES;USE_INTEROP_DLL;USE_PREPARE_V2;THROW_ON_DISPOSED;PRELOAD_NATIVE_LIBRARY;INTEROP_COMPRESS_EXTENSION;INTEROP_DEBUG;INTEROP_EXTENSION_FUNCTIONS;INTEROP_FTS5_EXTENSION;INTEROP_JSON1_EXTENSION;INTEROP_LOG;INTEROP_PERCENTILE_EXTENSION;INTEROP_REGEXP_EXTENSION;INTEROP_SHA1_EXTENSION;INTEROP_SHA3_EXTENSION;INTEROP_TEST_EXTENSION;INTEROP_TOTYPE_EXTENSION;INTEROP_VIRTUAL_TABLE;INTEROP_ZIPFILE_EXTENSION;INTEROP_SESSION_EXTENSION;TRACE_CONNECTION;TRACE_DETECTION;TRACE_PRELOAD;TRACE_SHARED;TRACE_WARNING;WINDOWS</DefineConstants>
+    <DocumentationFile>..\bin\2026\Debug\bin\System.Data.SQLite.xml</DocumentationFile>
+    <NoWarn>618,1591;3001</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>..\bin\2026\Release\bin\</OutputPath>
+    <DefineConstants>TRACE;NET_47;COUNT_HANDLE;TRACK_MEMORY_BYTES;USE_INTEROP_DLL;USE_PREPARE_V2;THROW_ON_DISPOSED;PRELOAD_NATIVE_LIBRARY;INTEROP_COMPRESS_EXTENSION;INTEROP_EXTENSION_FUNCTIONS;INTEROP_FTS5_EXTENSION;INTEROP_JSON1_EXTENSION;INTEROP_PERCENTILE_EXTENSION;INTEROP_REGEXP_EXTENSION;INTEROP_SHA1_EXTENSION;INTEROP_SHA3_EXTENSION;INTEROP_TOTYPE_EXTENSION;INTEROP_VIRTUAL_TABLE;INTEROP_ZIPFILE_EXTENSION;INTEROP_SESSION_EXTENSION;TRACE_CONNECTION;TRACE_DETECTION;TRACE_PRELOAD;TRACE_SHARED;TRACE_WARNING;WINDOWS;NET_47;COUNT_HANDLE;TRACK_MEMORY_BYTES;USE_INTEROP_DLL;USE_PREPARE_V2;THROW_ON_DISPOSED;PRELOAD_NATIVE_LIBRARY;INTEROP_COMPRESS_EXTENSION;INTEROP_EXTENSION_FUNCTIONS;INTEROP_FTS5_EXTENSION;INTEROP_JSON1_EXTENSION;INTEROP_PERCENTILE_EXTENSION;INTEROP_REGEXP_EXTENSION;INTEROP_SHA1_EXTENSION;INTEROP_SHA3_EXTENSION;INTEROP_TOTYPE_EXTENSION;INTEROP_VIRTUAL_TABLE;INTEROP_ZIPFILE_EXTENSION;INTEROP_SESSION_EXTENSION;TRACE_CONNECTION;TRACE_DETECTION;TRACE_PRELOAD;TRACE_SHARED;TRACE_WARNING;WINDOWS</DefineConstants>
+    <DocumentationFile>..\bin\2017\Release\bin\System.Data.SQLite.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>618,1591;3001</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <Import Project="$(SQLiteNetDir)\Targets\SQLite.NET.Platform.Settings.targets" />
+  <Import Project="$(SQLiteNetDir)\Targets\SQLite.NET.Settings.targets" />
+  <Import Project="$(SQLiteNetDir)\Targets\SQLite.NET.targets" />
+  <PropertyGroup Condition="'$(BinaryOutputPath)' != ''">
+    <OutputPath>$(BinaryOutputPath)</OutputPath>
+    <DocumentationFile>$(BinaryOutputPath)System.Data.SQLite.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <OutputPath>..\bin\2026\Release\bin\</OutputPath>
+    <DocumentationFile>..\bin\2026\Release\bin\System.Data.SQLite.xml</DocumentationFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildProjectDirectory)\Targets\System.Data.SQLite.References.targets" />
+  <Import Project="$(MSBuildProjectDirectory)\Targets\System.Data.SQLite.Properties.targets" />
+  <Import Project="$(MSBuildProjectDirectory)\Targets\System.Data.SQLite.Files.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      CopyConfigurations;
+    </BuildDependsOn>
+    <CleanDependsOn>
+      $(CleanDependsOn);
+      CleanConfigurations;
+    </CleanDependsOn>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
