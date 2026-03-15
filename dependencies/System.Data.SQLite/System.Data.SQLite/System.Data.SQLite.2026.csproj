@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  *
- * System.Data.SQLite.2017.csproj -
+ * System.Data.SQLite.2026.csproj -
  *
  * Written by Joe Mistachkin.
  * Released to the public domain, use at your own risk!
@@ -19,7 +19,7 @@
     <AssemblyName>System.Data.SQLite</AssemblyName>
     <SQLiteNetDir>$(MSBuildProjectDirectory)\..</SQLiteNetDir>
     <NetFx47>true</NetFx47>
-    <ConfigurationYear>2017</ConfigurationYear>
+    <ConfigurationYear>2026</ConfigurationYear>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -62,7 +62,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>..\bin\2026\Release\bin\</OutputPath>
     <DefineConstants>TRACE;NET_47;COUNT_HANDLE;TRACK_MEMORY_BYTES;USE_INTEROP_DLL;USE_PREPARE_V2;THROW_ON_DISPOSED;PRELOAD_NATIVE_LIBRARY;INTEROP_COMPRESS_EXTENSION;INTEROP_EXTENSION_FUNCTIONS;INTEROP_FTS5_EXTENSION;INTEROP_JSON1_EXTENSION;INTEROP_PERCENTILE_EXTENSION;INTEROP_REGEXP_EXTENSION;INTEROP_SHA1_EXTENSION;INTEROP_SHA3_EXTENSION;INTEROP_TOTYPE_EXTENSION;INTEROP_VIRTUAL_TABLE;INTEROP_ZIPFILE_EXTENSION;INTEROP_SESSION_EXTENSION;TRACE_CONNECTION;TRACE_DETECTION;TRACE_PRELOAD;TRACE_SHARED;TRACE_WARNING;WINDOWS;NET_47;COUNT_HANDLE;TRACK_MEMORY_BYTES;USE_INTEROP_DLL;USE_PREPARE_V2;THROW_ON_DISPOSED;PRELOAD_NATIVE_LIBRARY;INTEROP_COMPRESS_EXTENSION;INTEROP_EXTENSION_FUNCTIONS;INTEROP_FTS5_EXTENSION;INTEROP_JSON1_EXTENSION;INTEROP_PERCENTILE_EXTENSION;INTEROP_REGEXP_EXTENSION;INTEROP_SHA1_EXTENSION;INTEROP_SHA3_EXTENSION;INTEROP_TOTYPE_EXTENSION;INTEROP_VIRTUAL_TABLE;INTEROP_ZIPFILE_EXTENSION;INTEROP_SESSION_EXTENSION;TRACE_CONNECTION;TRACE_DETECTION;TRACE_PRELOAD;TRACE_SHARED;TRACE_WARNING;WINDOWS</DefineConstants>
-    <DocumentationFile>..\bin\2017\Release\bin\System.Data.SQLite.xml</DocumentationFile>
+    <DocumentationFile>..\bin\2026\Release\bin\System.Data.SQLite.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>618,1591;3001</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -84,6 +84,8 @@
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
+    <OutputPath>..\bin\2026\Debug\bin\</OutputPath>
+    <DocumentationFile>..\bin\2026\Debug\bin\System.Data.SQLite.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -114,4 +116,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>if exist "$(SolutionDir)Assemblies\" (copy $(TargetDir)*.dll $(SolutionDir)Assemblies\)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -34,10 +34,11 @@
     <DocumentationFile>..\bin\2026\DebugModule\bin\System.Data.SQLite.xml</DocumentationFile>
     <NoWarn>618,1591;3001</NoWarn>
     <DebugType>full</DebugType>
-    <PlatformTarget>ARM64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM64'">
     <OutputPath>bin\ARM64\Release\</OutputPath>

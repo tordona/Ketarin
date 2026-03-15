@@ -86,13 +86,13 @@
     <PlatformToolset>v145</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
-    <TargetName>$(INTEROP_MIXED_NAME)</TargetName>
+    <TargetName>SQLite.Interop</TargetName>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v145</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <TargetName>$(INTEROP_MIXED_NAME)</TargetName>
+    <TargetName>SQLite.Interop</TargetName>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v145</PlatformToolset>
@@ -104,13 +104,13 @@
     <PlatformToolset>v145</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNativeOnly|ARM64'" Label="Configuration">
-    <TargetName>$(INTEROP_NATIVE_NAME)</TargetName>
+    <TargetName>SQLite.Interop</TargetName>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v145</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNativeOnly|x64'" Label="Configuration">
-    <TargetName>$(INTEROP_NATIVE_NAME)</TargetName>
+    <TargetName>SQLite.Interop</TargetName>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v145</PlatformToolset>
@@ -131,7 +131,7 @@
     <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <TargetName>$(INTEROP_MIXED_NAME)</TargetName>
+    <TargetName>SQLite.Interop</TargetName>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -145,14 +145,14 @@
     <PlatformToolset>v145</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNativeOnly|ARM64'" Label="Configuration">
-    <TargetName>$(INTEROP_NATIVE_NAME)</TargetName>
+    <TargetName>SQLite.Interop</TargetName>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <PlatformToolset>v145</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNativeOnly|x64'" Label="Configuration">
-    <TargetName>$(INTEROP_NATIVE_NAME)</TargetName>
+    <TargetName>SQLite.Interop</TargetName>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -255,6 +255,9 @@
       <AssemblyIdentity>$(ProjectName), processorArchitecture=x86, version=$(INTEROP_MANIFEST_VERSION), type=win32</AssemblyIdentity>
       <UpdateFileHashes>true</UpdateFileHashes>
     </Manifest>
+    <PostBuildEvent>
+      <Command>if exist "$(SolutionDir)Assemblies\" (copy $(TargetDir)*.dll $(SolutionDir)Assemblies\)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <AfterBuildLinkTargets>
@@ -307,6 +310,9 @@
       <AssemblyIdentity>$(ProjectName), processorArchitecture=amd64, version=$(INTEROP_MANIFEST_VERSION), type=win32</AssemblyIdentity>
       <UpdateFileHashes>true</UpdateFileHashes>
     </Manifest>
+    <PostBuildEvent>
+      <Command>if exist "$(SolutionDir)Assemblies\" (copy $(TargetDir)*.dll $(SolutionDir)Assemblies\)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <AfterBuildLinkTargets>
@@ -380,6 +386,9 @@
       <AssemblyIdentity>$(ProjectName), processorArchitecture=x86, version=$(INTEROP_MANIFEST_VERSION), type=win32</AssemblyIdentity>
       <UpdateFileHashes>true</UpdateFileHashes>
     </Manifest>
+    <PostBuildEvent>
+      <Command>if exist "$(SolutionDir)Assemblies\" (copy $(TargetDir)*.dll $(SolutionDir)Assemblies\)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNativeOnly|Win32'">
     <BaseConfiguration>Debug</BaseConfiguration>
@@ -428,6 +437,9 @@
       <AssemblyIdentity>$(ProjectName), processorArchitecture=amd64, version=$(INTEROP_MANIFEST_VERSION), type=win32</AssemblyIdentity>
       <UpdateFileHashes>true</UpdateFileHashes>
     </Manifest>
+    <PostBuildEvent>
+      <Command>if exist "$(SolutionDir)Assemblies\" (copy $(TargetDir)*.dll $(SolutionDir)Assemblies\)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNativeOnly|x64'">
     <BaseConfiguration>Debug</BaseConfiguration>
@@ -518,6 +530,9 @@
       <AssemblyIdentity>$(ProjectName), processorArchitecture=x86, version=$(INTEROP_MANIFEST_VERSION), type=win32</AssemblyIdentity>
       <UpdateFileHashes>true</UpdateFileHashes>
     </Manifest>
+    <PostBuildEvent>
+      <Command>if exist "$(SolutionDir)Assemblies\" (copy $(TargetDir)*.dll $(SolutionDir)Assemblies\)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <AfterBuildLinkTargets>
@@ -572,6 +587,9 @@
       <AssemblyIdentity>$(ProjectName), processorArchitecture=amd64, version=$(INTEROP_MANIFEST_VERSION), type=win32</AssemblyIdentity>
       <UpdateFileHashes>true</UpdateFileHashes>
     </Manifest>
+    <PostBuildEvent>
+      <Command>if exist "$(SolutionDir)Assemblies\" (copy $(TargetDir)*.dll $(SolutionDir)Assemblies\)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <AfterBuildLinkTargets>
@@ -651,6 +669,9 @@
       <AssemblyIdentity>$(ProjectName), processorArchitecture=x86, version=$(INTEROP_MANIFEST_VERSION), type=win32</AssemblyIdentity>
       <UpdateFileHashes>true</UpdateFileHashes>
     </Manifest>
+    <PostBuildEvent>
+      <Command>if exist "$(SolutionDir)Assemblies\" (copy $(TargetDir)*.dll $(SolutionDir)Assemblies\)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNativeOnly|Win32'">
     <BaseConfiguration>Release</BaseConfiguration>
@@ -702,6 +723,9 @@
       <AssemblyIdentity>$(ProjectName), processorArchitecture=amd64, version=$(INTEROP_MANIFEST_VERSION), type=win32</AssemblyIdentity>
       <UpdateFileHashes>true</UpdateFileHashes>
     </Manifest>
+    <PostBuildEvent>
+      <Command>if exist "$(SolutionDir)Assemblies\" (copy $(TargetDir)*.dll $(SolutionDir)Assemblies\)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNativeOnly|x64'">
     <BaseConfiguration>Release</BaseConfiguration>
