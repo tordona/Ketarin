@@ -46,8 +46,8 @@ namespace Ketarin.Forms
             this.mnuVerySilent = new System.Windows.Forms.MenuItem();
             this.lnkSilentSetups = new CDBurnerXP.Controls.WebLink();
             this.olvEnvironmentVariables = new CDBurnerXP.Controls.ObjectListView();
-            this.colName = new CDBurnerXP.Controls.OLVColumn();
-            this.olvValue = new CDBurnerXP.Controls.OLVColumn();
+            this.colName = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
+            this.olvValue = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
             this.label1 = new System.Windows.Forms.Label();
             this.bBrowse = new System.Windows.Forms.Button();
             this.chkWaitUntilExit = new System.Windows.Forms.CheckBox();
@@ -70,17 +70,17 @@ namespace Ketarin.Forms
             this.lblProgram.AutoSize = true;
             this.lblProgram.Location = new System.Drawing.Point(12, 15);
             this.lblProgram.Name = "lblProgram";
-            this.lblProgram.Size = new System.Drawing.Size(84, 13);
+            this.lblProgram.Size = new System.Drawing.Size(93, 13);
             this.lblProgram.TabIndex = 0;
             this.lblProgram.Text = "&Program to start:";
             // 
             // txtProgram
             // 
-            this.txtProgram.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProgram.Location = new System.Drawing.Point(102, 12);
+            this.txtProgram.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProgram.Location = new System.Drawing.Point(111, 12);
             this.txtProgram.Name = "txtProgram";
-            this.txtProgram.Size = new System.Drawing.Size(255, 20);
+            this.txtProgram.Size = new System.Drawing.Size(246, 22);
             this.txtProgram.TabIndex = 1;
             // 
             // lblParameters
@@ -88,27 +88,27 @@ namespace Ketarin.Forms
             this.lblParameters.AutoSize = true;
             this.lblParameters.Location = new System.Drawing.Point(12, 41);
             this.lblParameters.Name = "lblParameters";
-            this.lblParameters.Size = new System.Drawing.Size(60, 13);
+            this.lblParameters.Size = new System.Drawing.Size(66, 13);
             this.lblParameters.TabIndex = 3;
             this.lblParameters.Text = "&Arguments:";
             // 
             // txtParameters
             // 
-            this.txtParameters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtParameters.Location = new System.Drawing.Point(102, 38);
+            this.txtParameters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtParameters.Location = new System.Drawing.Point(111, 38);
             this.txtParameters.Name = "txtParameters";
-            this.txtParameters.Size = new System.Drawing.Size(222, 20);
+            this.txtParameters.Size = new System.Drawing.Size(213, 22);
             this.txtParameters.TabIndex = 4;
             // 
             // bInsertArgument
             // 
             this.bInsertArgument.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bInsertArgument.AutoSize = true;
-            this.bInsertArgument.Location = new System.Drawing.Point(330, 36);
+            this.bInsertArgument.Location = new System.Drawing.Point(327, 36);
             this.bInsertArgument.Name = "bInsertArgument";
             this.bInsertArgument.SeparateDropdownButton = false;
-            this.bInsertArgument.Size = new System.Drawing.Size(61, 23);
+            this.bInsertArgument.Size = new System.Drawing.Size(64, 23);
             this.bInsertArgument.SplitMenu = this.argumentsMenu;
             this.bInsertArgument.TabIndex = 5;
             this.bInsertArgument.Text = "I&nsert";
@@ -159,7 +159,7 @@ namespace Ketarin.Forms
             this.lnkSilentSetups.AutoSize = true;
             this.lnkSilentSetups.Location = new System.Drawing.Point(12, 269);
             this.lnkSilentSetups.Name = "lnkSilentSetups";
-            this.lnkSilentSetups.Size = new System.Drawing.Size(143, 13);
+            this.lnkSilentSetups.Size = new System.Drawing.Size(158, 13);
             this.lnkSilentSetups.TabIndex = 12;
             this.lnkSilentSetups.TabStop = true;
             this.lnkSilentSetups.Text = "How to control silent setups?";
@@ -172,15 +172,16 @@ namespace Ketarin.Forms
             this.olvEnvironmentVariables.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvEnvironmentVariables.AlwaysGroupByColumn = null;
             this.olvEnvironmentVariables.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvEnvironmentVariables.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.olvEnvironmentVariables.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.olvEnvironmentVariables.CellEditActivation = CDBurnerXP.Controls.ObjectListView.CellEditActivateMode.SingleClick;
             this.olvEnvironmentVariables.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colName,
             this.olvValue});
             this.olvEnvironmentVariables.GridLines = true;
             this.olvEnvironmentVariables.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.olvEnvironmentVariables.HideSelection = false;
             this.olvEnvironmentVariables.HighlightBackgroundColor = System.Drawing.Color.Empty;
             this.olvEnvironmentVariables.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.olvEnvironmentVariables.LastSortColumn = null;
@@ -199,6 +200,7 @@ namespace Ketarin.Forms
             // colName
             // 
             this.colName.AspectName = "Name";
+            this.colName.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colName.IsEditable = false;
             this.colName.Text = "Name";
             this.colName.Width = 169;
@@ -207,6 +209,7 @@ namespace Ketarin.Forms
             // 
             this.olvValue.AspectName = "Value";
             this.olvValue.FillsFreeSpace = true;
+            this.olvValue.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.olvValue.Text = "Value";
             this.olvValue.Width = 161;
             // 
@@ -215,7 +218,7 @@ namespace Ketarin.Forms
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 98);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(156, 13);
+            this.label1.Size = new System.Drawing.Size(170, 13);
             this.label1.TabIndex = 7;
             this.label1.Text = "&Override environment variables:";
             // 
@@ -237,7 +240,7 @@ namespace Ketarin.Forms
             this.chkWaitUntilExit.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkWaitUntilExit.Location = new System.Drawing.Point(15, 64);
             this.chkWaitUntilExit.Name = "chkWaitUntilExit";
-            this.chkWaitUntilExit.Size = new System.Drawing.Size(161, 17);
+            this.chkWaitUntilExit.Size = new System.Drawing.Size(174, 17);
             this.chkWaitUntilExit.TabIndex = 6;
             this.chkWaitUntilExit.Text = "&Wait until process has exited";
             this.chkWaitUntilExit.UseVisualStyleBackColor = true;
@@ -257,6 +260,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.lblParameters);
             this.Controls.Add(this.txtProgram);
             this.Controls.Add(this.lblProgram);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(400, 300);
             this.Name = "StartProcessInstructionDialog";
             this.Text = "Start Process";

@@ -35,16 +35,16 @@ namespace Ketarin.Forms
             this.lblDesc = new System.Windows.Forms.Label();
             this.bClose = new System.Windows.Forms.Button();
             this.olvErrors = new CDBurnerXP.Controls.FastObjectListView();
-            this.colAppName = new CDBurnerXP.Controls.OLVColumn();
-            this.colError = new CDBurnerXP.Controls.OLVColumn();
+            this.colAppName = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
+            this.colError = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
             this.bCopyToClipboard = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.olvErrors)).BeginInit();
             this.SuspendLayout();
             // 
             // lblDesc
             // 
-            this.lblDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDesc.Location = new System.Drawing.Point(9, 9);
             this.lblDesc.Name = "lblDesc";
             this.lblDesc.Size = new System.Drawing.Size(518, 20);
@@ -68,9 +68,9 @@ namespace Ketarin.Forms
             this.olvErrors.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvErrors.AlwaysGroupByColumn = null;
             this.olvErrors.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.olvErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.olvErrors.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colAppName,
             this.colError});
@@ -94,6 +94,7 @@ namespace Ketarin.Forms
             // colAppName
             // 
             this.colAppName.AspectName = "ApplicationJob.Name";
+            this.colAppName.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colAppName.Text = "Application";
             this.colAppName.Width = 98;
             // 
@@ -101,6 +102,7 @@ namespace Ketarin.Forms
             // 
             this.colError.AspectName = "Message";
             this.colError.FillsFreeSpace = true;
+            this.colError.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colError.Text = "Error";
             this.colError.Width = 120;
             // 
@@ -124,6 +126,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.olvErrors);
             this.Controls.Add(this.bClose);
             this.Controls.Add(this.lblDesc);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 200);
             this.Name = "ErrorsDialog";

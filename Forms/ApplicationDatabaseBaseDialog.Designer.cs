@@ -38,9 +38,9 @@ namespace Ketarin.Forms
             this.cmnuApplications = new System.Windows.Forms.ContextMenu();
             this.cmnuProperties = new System.Windows.Forms.MenuItem();
             this.olvApplications = new CDBurnerXP.Controls.FastObjectListView();
-            this.colAppName = new CDBurnerXP.Controls.OLVColumn();
-            this.colDate = new CDBurnerXP.Controls.OLVColumn();
-            this.colUseCount = new CDBurnerXP.Controls.OLVColumn();
+            this.colAppName = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
+            this.colDate = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
+            this.colUseCount = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.olvApplications)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,7 +49,7 @@ namespace Ketarin.Forms
             this.lblResults.AutoSize = true;
             this.lblResults.Location = new System.Drawing.Point(12, 9);
             this.lblResults.Name = "lblResults";
-            this.lblResults.Size = new System.Drawing.Size(112, 13);
+            this.lblResults.Size = new System.Drawing.Size(122, 13);
             this.lblResults.TabIndex = 2;
             this.lblResults.Text = "&Available applications:";
             // 
@@ -95,9 +95,9 @@ namespace Ketarin.Forms
             this.olvApplications.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvApplications.AlwaysGroupByColumn = null;
             this.olvApplications.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvApplications.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.olvApplications.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.olvApplications.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colAppName,
             this.colDate,
@@ -117,25 +117,28 @@ namespace Ketarin.Forms
             this.olvApplications.UseCompatibleStateImageBehavior = false;
             this.olvApplications.View = System.Windows.Forms.View.Details;
             this.olvApplications.VirtualMode = true;
-            this.olvApplications.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.olvApplications_MouseDoubleClick);
             this.olvApplications.SelectedIndexChanged += new System.EventHandler(this.OnSelectedApplicationChanged);
+            this.olvApplications.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.olvApplications_MouseDoubleClick);
             // 
             // colAppName
             // 
             this.colAppName.AspectName = "ApplicationName";
             this.colAppName.FillsFreeSpace = true;
+            this.colAppName.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colAppName.Text = "Application name";
             this.colAppName.Width = 100;
             // 
             // colDate
             // 
             this.colDate.AspectName = "UpdatedAtDate";
+            this.colDate.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colDate.Text = "Last updated";
             this.colDate.Width = 130;
             // 
             // colUseCount
             // 
             this.colUseCount.AspectName = "UseCount";
+            this.colUseCount.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colUseCount.Text = "Uses";
             this.colUseCount.Width = 40;
             // 
@@ -148,6 +151,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.olvApplications);
             this.Controls.Add(this.lblResults);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(330, 340);
             this.Name = "ApplicationDatabaseBaseDialog";

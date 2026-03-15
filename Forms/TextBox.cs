@@ -48,5 +48,16 @@ namespace Ketarin.Forms
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // TextBox
+            // 
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ResumeLayout(false);
+
+        }
     }
 }

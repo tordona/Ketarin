@@ -123,7 +123,7 @@ namespace Ketarin.Forms
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(320, 356);
+            this.bCancel.Location = new System.Drawing.Point(442, 356);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 100;
@@ -135,7 +135,7 @@ namespace Ketarin.Forms
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(239, 356);
+            this.bOK.Location = new System.Drawing.Point(361, 356);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 99;
@@ -148,7 +148,7 @@ namespace Ketarin.Forms
             this.lblApplicationName.AutoSize = true;
             this.lblApplicationName.Location = new System.Drawing.Point(4, 10);
             this.lblApplicationName.Name = "lblApplicationName";
-            this.lblApplicationName.Size = new System.Drawing.Size(91, 13);
+            this.lblApplicationName.Size = new System.Drawing.Size(100, 13);
             this.lblApplicationName.TabIndex = 0;
             this.lblApplicationName.Text = "&Application name:";
             // 
@@ -156,10 +156,10 @@ namespace Ketarin.Forms
             // 
             this.txtApplicationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtApplicationName.Location = new System.Drawing.Point(101, 7);
+            this.txtApplicationName.Location = new System.Drawing.Point(110, 7);
             this.txtApplicationName.MaxLength = 255;
             this.txtApplicationName.Name = "txtApplicationName";
-            this.txtApplicationName.Size = new System.Drawing.Size(268, 20);
+            this.txtApplicationName.Size = new System.Drawing.Size(381, 22);
             this.txtApplicationName.TabIndex = 1;
             // 
             // pnlDownloadSource
@@ -174,7 +174,7 @@ namespace Ketarin.Forms
             this.pnlDownloadSource.Controls.Add(this.rbFixedUrl);
             this.pnlDownloadSource.Location = new System.Drawing.Point(4, 104);
             this.pnlDownloadSource.Name = "pnlDownloadSource";
-            this.pnlDownloadSource.Size = new System.Drawing.Size(365, 80);
+            this.pnlDownloadSource.Size = new System.Drawing.Size(487, 80);
             this.pnlDownloadSource.TabIndex = 6;
             // 
             // pnlBeta
@@ -186,15 +186,15 @@ namespace Ketarin.Forms
             this.pnlBeta.Location = new System.Drawing.Point(92, 55);
             this.pnlBeta.Margin = new System.Windows.Forms.Padding(0);
             this.pnlBeta.Name = "pnlBeta";
-            this.pnlBeta.Size = new System.Drawing.Size(281, 18);
+            this.pnlBeta.Size = new System.Drawing.Size(441, 18);
             this.pnlBeta.TabIndex = 16;
             // 
             // rbBetaAvoid
             // 
             this.rbBetaAvoid.AutoSize = true;
-            this.rbBetaAvoid.Location = new System.Drawing.Point(145, 0);
+            this.rbBetaAvoid.Location = new System.Drawing.Point(153, 0);
             this.rbBetaAvoid.Name = "rbBetaAvoid";
-            this.rbBetaAvoid.Size = new System.Drawing.Size(52, 17);
+            this.rbBetaAvoid.Size = new System.Drawing.Size(54, 17);
             this.rbBetaAvoid.TabIndex = 27;
             this.rbBetaAvoid.Text = "A&void";
             this.rbBetaAvoid.UseVisualStyleBackColor = true;
@@ -202,9 +202,9 @@ namespace Ketarin.Forms
             // rbAlwaysDownload
             // 
             this.rbAlwaysDownload.AutoSize = true;
-            this.rbAlwaysDownload.Location = new System.Drawing.Point(203, 0);
+            this.rbAlwaysDownload.Location = new System.Drawing.Point(213, 0);
             this.rbAlwaysDownload.Name = "rbAlwaysDownload";
-            this.rbAlwaysDownload.Size = new System.Drawing.Size(73, 17);
+            this.rbAlwaysDownload.Size = new System.Drawing.Size(79, 17);
             this.rbAlwaysDownload.TabIndex = 28;
             this.rbAlwaysDownload.Text = "Do&wnload";
             this.rbAlwaysDownload.UseVisualStyleBackColor = true;
@@ -214,7 +214,7 @@ namespace Ketarin.Forms
             this.lblBetaVersions.AutoSize = true;
             this.lblBetaVersions.Location = new System.Drawing.Point(0, 2);
             this.lblBetaVersions.Name = "lblBetaVersions";
-            this.lblBetaVersions.Size = new System.Drawing.Size(74, 13);
+            this.lblBetaVersions.Size = new System.Drawing.Size(78, 13);
             this.lblBetaVersions.TabIndex = 25;
             this.lblBetaVersions.Text = "&Beta versions:";
             // 
@@ -222,9 +222,9 @@ namespace Ketarin.Forms
             // 
             this.rbBetaDefault.AutoSize = true;
             this.rbBetaDefault.Checked = true;
-            this.rbBetaDefault.Location = new System.Drawing.Point(77, 0);
+            this.rbBetaDefault.Location = new System.Drawing.Point(85, 0);
             this.rbBetaDefault.Name = "rbBetaDefault";
-            this.rbBetaDefault.Size = new System.Drawing.Size(65, 17);
+            this.rbBetaDefault.Size = new System.Drawing.Size(69, 17);
             this.rbBetaDefault.TabIndex = 26;
             this.rbBetaDefault.TabStop = true;
             this.rbBetaDefault.Text = "(&Default)";
@@ -233,7 +233,7 @@ namespace Ketarin.Forms
             // bVariables
             // 
             this.bVariables.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bVariables.Location = new System.Drawing.Point(290, 0);
+            this.bVariables.Location = new System.Drawing.Point(412, 0);
             this.bVariables.Name = "bVariables";
             this.bVariables.Size = new System.Drawing.Size(75, 23);
             this.bVariables.TabIndex = 13;
@@ -247,7 +247,7 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFileHippoId.Location = new System.Drawing.Point(95, 31);
             this.txtFileHippoId.Name = "txtFileHippoId";
-            this.txtFileHippoId.Size = new System.Drawing.Size(270, 20);
+            this.txtFileHippoId.Size = new System.Drawing.Size(392, 22);
             this.txtFileHippoId.TabIndex = 15;
             this.txtFileHippoId.TextChanged += new System.EventHandler(this.txtFileHippoId_TextChanged);
             this.txtFileHippoId.LostFocus += new System.EventHandler(this.txtFileHippoId_LostFocus);
@@ -257,7 +257,7 @@ namespace Ketarin.Forms
             this.rbFileHippo.AutoSize = true;
             this.rbFileHippo.Location = new System.Drawing.Point(3, 32);
             this.rbFileHippo.Name = "rbFileHippo";
-            this.rbFileHippo.Size = new System.Drawing.Size(86, 17);
+            this.rbFileHippo.Size = new System.Drawing.Size(92, 17);
             this.rbFileHippo.TabIndex = 14;
             this.rbFileHippo.Text = "File&Hippo ID:";
             this.rbFileHippo.UseVisualStyleBackColor = true;
@@ -269,7 +269,7 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFixedUrl.Location = new System.Drawing.Point(95, 2);
             this.txtFixedUrl.Name = "txtFixedUrl";
-            this.txtFixedUrl.Size = new System.Drawing.Size(186, 20);
+            this.txtFixedUrl.Size = new System.Drawing.Size(308, 22);
             this.txtFixedUrl.TabIndex = 12;
             this.txtFixedUrl.TextChanged += new System.EventHandler(this.txtFixedUrl_TextChanged);
             // 
@@ -279,7 +279,7 @@ namespace Ketarin.Forms
             this.rbFixedUrl.Checked = true;
             this.rbFixedUrl.Location = new System.Drawing.Point(3, 3);
             this.rbFixedUrl.Name = "rbFixedUrl";
-            this.rbFixedUrl.Size = new System.Drawing.Size(50, 17);
+            this.rbFixedUrl.Size = new System.Drawing.Size(48, 17);
             this.rbFixedUrl.TabIndex = 11;
             this.rbFixedUrl.TabStop = true;
             this.rbFixedUrl.Text = "&URL:";
@@ -296,13 +296,13 @@ namespace Ketarin.Forms
             this.pnlTarget.Controls.Add(this.rbFileName);
             this.pnlTarget.Location = new System.Drawing.Point(3, 208);
             this.pnlTarget.Name = "pnlTarget";
-            this.pnlTarget.Size = new System.Drawing.Size(365, 53);
+            this.pnlTarget.Size = new System.Drawing.Size(487, 53);
             this.pnlTarget.TabIndex = 8;
             // 
             // bBrowseFile
             // 
             this.bBrowseFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bBrowseFile.Location = new System.Drawing.Point(333, 24);
+            this.bBrowseFile.Location = new System.Drawing.Point(455, 24);
             this.bBrowseFile.Name = "bBrowseFile";
             this.bBrowseFile.Size = new System.Drawing.Size(32, 23);
             this.bBrowseFile.TabIndex = 24;
@@ -318,7 +318,7 @@ namespace Ketarin.Forms
             this.txtTarget.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
             this.txtTarget.Location = new System.Drawing.Point(4, 26);
             this.txtTarget.Name = "txtTarget";
-            this.txtTarget.Size = new System.Drawing.Size(323, 20);
+            this.txtTarget.Size = new System.Drawing.Size(445, 22);
             this.txtTarget.TabIndex = 23;
             // 
             // rbFolder
@@ -326,7 +326,7 @@ namespace Ketarin.Forms
             this.rbFolder.AutoSize = true;
             this.rbFolder.Location = new System.Drawing.Point(87, 3);
             this.rbFolder.Name = "rbFolder";
-            this.rbFolder.Size = new System.Drawing.Size(90, 17);
+            this.rbFolder.Size = new System.Drawing.Size(95, 17);
             this.rbFolder.TabIndex = 22;
             this.rbFolder.Text = "Save in f&older";
             this.rbFolder.UseVisualStyleBackColor = true;
@@ -338,7 +338,7 @@ namespace Ketarin.Forms
             this.rbFileName.Checked = true;
             this.rbFileName.Location = new System.Drawing.Point(3, 3);
             this.rbFileName.Name = "rbFileName";
-            this.rbFileName.Size = new System.Drawing.Size(78, 17);
+            this.rbFileName.Size = new System.Drawing.Size(81, 17);
             this.rbFileName.TabIndex = 21;
             this.rbFileName.TabStop = true;
             this.rbFileName.Text = "&Save to file";
@@ -352,7 +352,7 @@ namespace Ketarin.Forms
             this.chkDeletePrevious.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkDeletePrevious.Location = new System.Drawing.Point(9, 275);
             this.chkDeletePrevious.Name = "chkDeletePrevious";
-            this.chkDeletePrevious.Size = new System.Drawing.Size(218, 17);
+            this.chkDeletePrevious.Size = new System.Drawing.Size(239, 17);
             this.chkDeletePrevious.TabIndex = 17;
             this.chkDeletePrevious.Text = "Always &delete previously downloaded file";
             this.chkDeletePrevious.UseVisualStyleBackColor = true;
@@ -362,7 +362,7 @@ namespace Ketarin.Forms
             this.lblCategory.AutoSize = true;
             this.lblCategory.Location = new System.Drawing.Point(5, 36);
             this.lblCategory.Name = "lblCategory";
-            this.lblCategory.Size = new System.Drawing.Size(52, 13);
+            this.lblCategory.Size = new System.Drawing.Size(56, 13);
             this.lblCategory.TabIndex = 2;
             this.lblCategory.Text = "&Category:";
             // 
@@ -373,9 +373,9 @@ namespace Ketarin.Forms
             this.cboCategory.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.cboCategory.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboCategory.FormattingEnabled = true;
-            this.cboCategory.Location = new System.Drawing.Point(101, 33);
+            this.cboCategory.Location = new System.Drawing.Point(110, 33);
             this.cboCategory.Name = "cboCategory";
-            this.cboCategory.Size = new System.Drawing.Size(268, 21);
+            this.cboCategory.Size = new System.Drawing.Size(381, 21);
             this.cboCategory.TabIndex = 3;
             // 
             // sepTarget
@@ -384,7 +384,7 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sepTarget.Location = new System.Drawing.Point(3, 185);
             this.sepTarget.Name = "sepTarget";
-            this.sepTarget.Size = new System.Drawing.Size(366, 23);
+            this.sepTarget.Size = new System.Drawing.Size(488, 23);
             this.sepTarget.TabIndex = 7;
             this.sepTarget.Text = "Download location";
             // 
@@ -394,7 +394,7 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sepDownload.Location = new System.Drawing.Point(3, 81);
             this.sepDownload.Name = "sepDownload";
-            this.sepDownload.Size = new System.Drawing.Size(366, 23);
+            this.sepDownload.Size = new System.Drawing.Size(488, 23);
             this.sepDownload.TabIndex = 5;
             this.sepDownload.Text = "Download source";
             // 
@@ -403,7 +403,7 @@ namespace Ketarin.Forms
             this.chkShareOnline.AutoSize = true;
             this.chkShareOnline.Location = new System.Drawing.Point(9, 252);
             this.chkShareOnline.Name = "chkShareOnline";
-            this.chkShareOnline.Size = new System.Drawing.Size(212, 17);
+            this.chkShareOnline.Size = new System.Drawing.Size(236, 17);
             this.chkShareOnline.TabIndex = 16;
             this.chkShareOnline.Text = "Sh&are this application online with others";
             this.chkShareOnline.UseVisualStyleBackColor = true;
@@ -413,7 +413,7 @@ namespace Ketarin.Forms
             this.lblSpoofReferer.AutoSize = true;
             this.lblSpoofReferer.Location = new System.Drawing.Point(6, 78);
             this.lblSpoofReferer.Name = "lblSpoofReferer";
-            this.lblSpoofReferer.Size = new System.Drawing.Size(103, 13);
+            this.lblSpoofReferer.Size = new System.Drawing.Size(105, 13);
             this.lblSpoofReferer.TabIndex = 3;
             this.lblSpoofReferer.Text = "Sp&oof HTTP referer:";
             // 
@@ -423,7 +423,7 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSpoofReferer.Location = new System.Drawing.Point(115, 75);
             this.txtSpoofReferer.Name = "txtSpoofReferer";
-            this.txtSpoofReferer.Size = new System.Drawing.Size(253, 20);
+            this.txtSpoofReferer.Size = new System.Drawing.Size(375, 22);
             this.txtSpoofReferer.TabIndex = 4;
             // 
             // tcApplication
@@ -439,7 +439,7 @@ namespace Ketarin.Forms
             this.tcApplication.Location = new System.Drawing.Point(12, 12);
             this.tcApplication.Name = "tcApplication";
             this.tcApplication.SelectedIndex = 0;
-            this.tcApplication.Size = new System.Drawing.Size(383, 329);
+            this.tcApplication.Size = new System.Drawing.Size(505, 329);
             this.tcApplication.TabIndex = 0;
             // 
             // tpApplication
@@ -458,21 +458,21 @@ namespace Ketarin.Forms
             this.tpApplication.Location = new System.Drawing.Point(4, 22);
             this.tpApplication.Name = "tpApplication";
             this.tpApplication.Padding = new System.Windows.Forms.Padding(3);
-            this.tpApplication.Size = new System.Drawing.Size(375, 303);
+            this.tpApplication.Size = new System.Drawing.Size(497, 303);
             this.tpApplication.TabIndex = 0;
             this.tpApplication.Text = "Application";
             this.tpApplication.UseVisualStyleBackColor = true;
             // 
             // numNumberOfRevisions
             // 
-            this.numNumberOfRevisions.Location = new System.Drawing.Point(250, 262);
+            this.numNumberOfRevisions.Location = new System.Drawing.Point(274, 262);
             this.numNumberOfRevisions.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.numNumberOfRevisions.Name = "numNumberOfRevisions";
-            this.numNumberOfRevisions.Size = new System.Drawing.Size(53, 20);
+            this.numNumberOfRevisions.Size = new System.Drawing.Size(53, 22);
             this.numNumberOfRevisions.TabIndex = 10;
             this.numNumberOfRevisions.Value = new decimal(new int[] {
             1,
@@ -485,7 +485,7 @@ namespace Ketarin.Forms
             this.lblNumberOfRevisions.AutoSize = true;
             this.lblNumberOfRevisions.Location = new System.Drawing.Point(5, 264);
             this.lblNumberOfRevisions.Name = "lblNumberOfRevisions";
-            this.lblNumberOfRevisions.Size = new System.Drawing.Size(239, 13);
+            this.lblNumberOfRevisions.Size = new System.Drawing.Size(263, 13);
             this.lblNumberOfRevisions.TabIndex = 9;
             this.lblNumberOfRevisions.Text = "Total &number of files to keep (original + backups):";
             // 
@@ -494,9 +494,9 @@ namespace Ketarin.Forms
             this.chkEnabled.AutoSize = true;
             this.chkEnabled.Checked = true;
             this.chkEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEnabled.Location = new System.Drawing.Point(7, 60);
+            this.chkEnabled.Location = new System.Drawing.Point(110, 60);
             this.chkEnabled.Name = "chkEnabled";
-            this.chkEnabled.Size = new System.Drawing.Size(65, 17);
+            this.chkEnabled.Size = new System.Drawing.Size(68, 17);
             this.chkEnabled.TabIndex = 4;
             this.chkEnabled.Text = "&Enabled";
             this.chkEnabled.UseVisualStyleBackColor = true;
@@ -524,7 +524,7 @@ namespace Ketarin.Forms
             this.tpSettings.Location = new System.Drawing.Point(4, 22);
             this.tpSettings.Name = "tpSettings";
             this.tpSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tpSettings.Size = new System.Drawing.Size(375, 303);
+            this.tpSettings.Size = new System.Drawing.Size(497, 303);
             this.tpSettings.TabIndex = 1;
             this.tpSettings.Text = "Advanced settings";
             this.tpSettings.UseVisualStyleBackColor = true;
@@ -532,9 +532,9 @@ namespace Ketarin.Forms
             // lblHashVariable
             // 
             this.lblHashVariable.AutoSize = true;
-            this.lblHashVariable.Location = new System.Drawing.Point(209, 203);
+            this.lblHashVariable.Location = new System.Drawing.Point(227, 203);
             this.lblHashVariable.Name = "lblHashVariable";
-            this.lblHashVariable.Size = new System.Drawing.Size(48, 13);
+            this.lblHashVariable.Size = new System.Drawing.Size(51, 13);
             this.lblHashVariable.TabIndex = 13;
             this.lblHashVariable.Text = "&Variable:";
             // 
@@ -549,7 +549,7 @@ namespace Ketarin.Forms
             "SHA1",
             "SHA256",
             "SHA512"});
-            this.cboHashType.Location = new System.Drawing.Point(138, 200);
+            this.cboHashType.Location = new System.Drawing.Point(152, 200);
             this.cboHashType.Name = "cboHashType";
             this.cboHashType.Size = new System.Drawing.Size(65, 21);
             this.cboHashType.TabIndex = 12;
@@ -558,9 +558,9 @@ namespace Ketarin.Forms
             // 
             this.cboHashVariable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboHashVariable.Location = new System.Drawing.Point(263, 200);
+            this.cboHashVariable.Location = new System.Drawing.Point(284, 200);
             this.cboHashVariable.Name = "cboHashVariable";
-            this.cboHashVariable.Size = new System.Drawing.Size(105, 21);
+            this.cboHashVariable.Size = new System.Drawing.Size(206, 21);
             this.cboHashVariable.TabIndex = 14;
             // 
             // lblCompareWithHash
@@ -568,7 +568,7 @@ namespace Ketarin.Forms
             this.lblCompareWithHash.AutoSize = true;
             this.lblCompareWithHash.Location = new System.Drawing.Point(6, 203);
             this.lblCompareWithHash.Name = "lblCompareWithHash";
-            this.lblCompareWithHash.Size = new System.Drawing.Size(129, 13);
+            this.lblCompareWithHash.Size = new System.Drawing.Size(140, 13);
             this.lblCompareWithHash.TabIndex = 11;
             this.lblCompareWithHash.Text = "Compare with &hash value:";
             // 
@@ -578,7 +578,7 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUserAgent.Location = new System.Drawing.Point(115, 101);
             this.txtUserAgent.Name = "txtUserAgent";
-            this.txtUserAgent.Size = new System.Drawing.Size(253, 20);
+            this.txtUserAgent.Size = new System.Drawing.Size(375, 22);
             this.txtUserAgent.TabIndex = 6;
             // 
             // lblUserAgent
@@ -586,7 +586,7 @@ namespace Ketarin.Forms
             this.lblUserAgent.AutoSize = true;
             this.lblUserAgent.Location = new System.Drawing.Point(6, 104);
             this.lblUserAgent.Name = "lblUserAgent";
-            this.lblUserAgent.Size = new System.Drawing.Size(62, 13);
+            this.lblUserAgent.Size = new System.Drawing.Size(66, 13);
             this.lblUserAgent.TabIndex = 5;
             this.lblUserAgent.Text = "User age&nt:";
             // 
@@ -596,7 +596,7 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sepMiscellaneous.Location = new System.Drawing.Point(6, 226);
             this.sepMiscellaneous.Name = "sepMiscellaneous";
-            this.sepMiscellaneous.Size = new System.Drawing.Size(363, 23);
+            this.sepMiscellaneous.Size = new System.Drawing.Size(485, 23);
             this.sepMiscellaneous.TabIndex = 15;
             this.sepMiscellaneous.Text = "Miscellaneous";
             // 
@@ -606,7 +606,7 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sepUpdateDetection.Location = new System.Drawing.Point(6, 124);
             this.sepUpdateDetection.Name = "sepUpdateDetection";
-            this.sepUpdateDetection.Size = new System.Drawing.Size(363, 23);
+            this.sepUpdateDetection.Size = new System.Drawing.Size(485, 23);
             this.sepUpdateDetection.TabIndex = 7;
             this.sepUpdateDetection.Text = "Update detection";
             // 
@@ -616,7 +616,7 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sepDownloads.Location = new System.Drawing.Point(6, 3);
             this.sepDownloads.Name = "sepDownloads";
-            this.sepDownloads.Size = new System.Drawing.Size(363, 23);
+            this.sepDownloads.Size = new System.Drawing.Size(485, 23);
             this.sepDownloads.TabIndex = 0;
             this.sepDownloads.Text = "&Downloading";
             // 
@@ -625,7 +625,7 @@ namespace Ketarin.Forms
             this.chkIgnoreFileInformation.AutoSize = true;
             this.chkIgnoreFileInformation.Location = new System.Drawing.Point(9, 150);
             this.chkIgnoreFileInformation.Name = "chkIgnoreFileInformation";
-            this.chkIgnoreFileInformation.Size = new System.Drawing.Size(297, 17);
+            this.chkIgnoreFileInformation.Size = new System.Drawing.Size(339, 17);
             this.chkIgnoreFileInformation.TabIndex = 8;
             this.chkIgnoreFileInformation.Text = "Ignore file infor&mation (do not re-download if file is missing)";
             this.chkIgnoreFileInformation.UseVisualStyleBackColor = true;
@@ -635,7 +635,7 @@ namespace Ketarin.Forms
             this.chkCheckForUpdatesOnly.AutoSize = true;
             this.chkCheckForUpdatesOnly.Location = new System.Drawing.Point(9, 52);
             this.chkCheckForUpdatesOnly.Name = "chkCheckForUpdatesOnly";
-            this.chkCheckForUpdatesOnly.Size = new System.Drawing.Size(221, 17);
+            this.chkCheckForUpdatesOnly.Size = new System.Drawing.Size(241, 17);
             this.chkCheckForUpdatesOnly.TabIndex = 2;
             this.chkCheckForUpdatesOnly.Text = "Do not download, &check for updates only";
             this.chkCheckForUpdatesOnly.UseVisualStyleBackColor = true;
@@ -645,7 +645,7 @@ namespace Ketarin.Forms
             this.chkDownloadExclusively.AutoSize = true;
             this.chkDownloadExclusively.Location = new System.Drawing.Point(9, 29);
             this.chkDownloadExclusively.Name = "chkDownloadExclusively";
-            this.chkDownloadExclusively.Size = new System.Drawing.Size(359, 17);
+            this.chkDownloadExclusively.Size = new System.Drawing.Size(404, 17);
             this.chkDownloadExclusively.TabIndex = 1;
             this.chkDownloadExclusively.Text = "Do not download this application &simultaneously with other applications";
             this.chkDownloadExclusively.UseVisualStyleBackColor = true;
@@ -654,9 +654,9 @@ namespace Ketarin.Forms
             // 
             this.txtUseVariablesForChanges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(263, 173);
+            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(284, 173);
             this.txtUseVariablesForChanges.Name = "txtUseVariablesForChanges";
-            this.txtUseVariablesForChanges.Size = new System.Drawing.Size(105, 21);
+            this.txtUseVariablesForChanges.Size = new System.Drawing.Size(206, 21);
             this.txtUseVariablesForChanges.TabIndex = 10;
             // 
             // lblUseVariableForChanges
@@ -664,7 +664,7 @@ namespace Ketarin.Forms
             this.lblUseVariableForChanges.AutoSize = true;
             this.lblUseVariableForChanges.Location = new System.Drawing.Point(6, 176);
             this.lblUseVariableForChanges.Name = "lblUseVariableForChanges";
-            this.lblUseVariableForChanges.Size = new System.Drawing.Size(247, 13);
+            this.lblUseVariableForChanges.Size = new System.Drawing.Size(272, 13);
             this.lblUseVariableForChanges.TabIndex = 9;
             this.lblUseVariableForChanges.Text = "&Use the following variable as indicator for changes:";
             // 
@@ -673,7 +673,7 @@ namespace Ketarin.Forms
             this.tpCommands.Controls.Add(this.tableLayoutCommands);
             this.tpCommands.Location = new System.Drawing.Point(4, 22);
             this.tpCommands.Name = "tpCommands";
-            this.tpCommands.Size = new System.Drawing.Size(375, 303);
+            this.tpCommands.Size = new System.Drawing.Size(497, 303);
             this.tpCommands.TabIndex = 2;
             this.tpCommands.Text = "Commands";
             this.tpCommands.UseVisualStyleBackColor = true;
@@ -692,7 +692,7 @@ namespace Ketarin.Forms
             this.tableLayoutCommands.RowCount = 2;
             this.tableLayoutCommands.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutCommands.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutCommands.Size = new System.Drawing.Size(366, 294);
+            this.tableLayoutCommands.Size = new System.Drawing.Size(488, 294);
             this.tableLayoutCommands.TabIndex = 4;
             // 
             // pnlCommandBefore
@@ -703,7 +703,7 @@ namespace Ketarin.Forms
             this.pnlCommandBefore.Location = new System.Drawing.Point(0, 3);
             this.pnlCommandBefore.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.pnlCommandBefore.Name = "pnlCommandBefore";
-            this.pnlCommandBefore.Size = new System.Drawing.Size(363, 141);
+            this.pnlCommandBefore.Size = new System.Drawing.Size(485, 141);
             this.pnlCommandBefore.TabIndex = 0;
             // 
             // txtExecuteBefore
@@ -712,11 +712,12 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtExecuteBefore.Application = null;
+            this.txtExecuteBefore.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtExecuteBefore.Location = new System.Drawing.Point(0, 16);
             this.txtExecuteBefore.Margin = new System.Windows.Forms.Padding(0);
             this.txtExecuteBefore.Name = "txtExecuteBefore";
             this.txtExecuteBefore.ShowBorder = false;
-            this.txtExecuteBefore.Size = new System.Drawing.Size(363, 122);
+            this.txtExecuteBefore.Size = new System.Drawing.Size(485, 122);
             this.txtExecuteBefore.TabIndex = 1;
             this.txtExecuteBefore.VariableNames = new string[0];
             // 
@@ -725,7 +726,7 @@ namespace Ketarin.Forms
             this.lblCommandBefore.AutoSize = true;
             this.lblCommandBefore.Location = new System.Drawing.Point(-3, 0);
             this.lblCommandBefore.Name = "lblCommandBefore";
-            this.lblCommandBefore.Size = new System.Drawing.Size(256, 13);
+            this.lblCommandBefore.Size = new System.Drawing.Size(285, 13);
             this.lblCommandBefore.TabIndex = 0;
             this.lblCommandBefore.Text = "Execute the following command &before downloading:";
             // 
@@ -737,7 +738,7 @@ namespace Ketarin.Forms
             this.pnlCommandAfter.Location = new System.Drawing.Point(0, 147);
             this.pnlCommandAfter.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.pnlCommandAfter.Name = "pnlCommandAfter";
-            this.pnlCommandAfter.Size = new System.Drawing.Size(363, 147);
+            this.pnlCommandAfter.Size = new System.Drawing.Size(485, 147);
             this.pnlCommandAfter.TabIndex = 1;
             // 
             // txtExecuteAfter
@@ -746,11 +747,12 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtExecuteAfter.Application = null;
+            this.txtExecuteAfter.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtExecuteAfter.Location = new System.Drawing.Point(0, 21);
             this.txtExecuteAfter.Margin = new System.Windows.Forms.Padding(0);
             this.txtExecuteAfter.Name = "txtExecuteAfter";
             this.txtExecuteAfter.ShowBorder = false;
-            this.txtExecuteAfter.Size = new System.Drawing.Size(363, 126);
+            this.txtExecuteAfter.Size = new System.Drawing.Size(485, 126);
             this.txtExecuteAfter.TabIndex = 3;
             this.txtExecuteAfter.VariableNames = new string[0];
             // 
@@ -759,7 +761,7 @@ namespace Ketarin.Forms
             this.lblExecuteCommand.AutoSize = true;
             this.lblExecuteCommand.Location = new System.Drawing.Point(-3, 5);
             this.lblExecuteCommand.Name = "lblExecuteCommand";
-            this.lblExecuteCommand.Size = new System.Drawing.Size(247, 13);
+            this.lblExecuteCommand.Size = new System.Drawing.Size(275, 13);
             this.lblExecuteCommand.TabIndex = 2;
             this.lblExecuteCommand.Text = "Execute the following command &after downloading:";
             // 
@@ -771,7 +773,7 @@ namespace Ketarin.Forms
             this.tpInformation.Controls.Add(this.lblWebsite);
             this.tpInformation.Location = new System.Drawing.Point(4, 22);
             this.tpInformation.Name = "tpInformation";
-            this.tpInformation.Size = new System.Drawing.Size(375, 303);
+            this.tpInformation.Size = new System.Drawing.Size(497, 303);
             this.tpInformation.TabIndex = 3;
             this.tpInformation.Text = "Information";
             this.tpInformation.UseVisualStyleBackColor = true;
@@ -786,7 +788,7 @@ namespace Ketarin.Forms
             this.txtNotes.Multiline = true;
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtNotes.Size = new System.Drawing.Size(363, 242);
+            this.txtNotes.Size = new System.Drawing.Size(485, 242);
             this.txtNotes.TabIndex = 4;
             // 
             // lblNotes
@@ -794,7 +796,7 @@ namespace Ketarin.Forms
             this.lblNotes.AutoSize = true;
             this.lblNotes.Location = new System.Drawing.Point(3, 39);
             this.lblNotes.Name = "lblNotes";
-            this.lblNotes.Size = new System.Drawing.Size(38, 13);
+            this.lblNotes.Size = new System.Drawing.Size(40, 13);
             this.lblNotes.TabIndex = 3;
             this.lblNotes.Text = "N&otes:";
             // 
@@ -804,7 +806,7 @@ namespace Ketarin.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtWebsite.Location = new System.Drawing.Point(58, 7);
             this.txtWebsite.Name = "txtWebsite";
-            this.txtWebsite.Size = new System.Drawing.Size(311, 20);
+            this.txtWebsite.Size = new System.Drawing.Size(433, 22);
             this.txtWebsite.TabIndex = 1;
             // 
             // lblWebsite
@@ -812,7 +814,7 @@ namespace Ketarin.Forms
             this.lblWebsite.AutoSize = true;
             this.lblWebsite.Location = new System.Drawing.Point(3, 10);
             this.lblWebsite.Name = "lblWebsite";
-            this.lblWebsite.Size = new System.Drawing.Size(49, 13);
+            this.lblWebsite.Size = new System.Drawing.Size(52, 13);
             this.lblWebsite.TabIndex = 0;
             this.lblWebsite.Text = "&Website:";
             // 
@@ -824,7 +826,7 @@ namespace Ketarin.Forms
             this.tpSetup.Location = new System.Drawing.Point(4, 22);
             this.tpSetup.Name = "tpSetup";
             this.tpSetup.Padding = new System.Windows.Forms.Padding(3);
-            this.tpSetup.Size = new System.Drawing.Size(375, 303);
+            this.tpSetup.Size = new System.Drawing.Size(497, 303);
             this.tpSetup.TabIndex = 4;
             this.tpSetup.Text = "Setup";
             this.tpSetup.UseVisualStyleBackColor = true;
@@ -836,7 +838,7 @@ namespace Ketarin.Forms
             this.bAddInstruction.Location = new System.Drawing.Point(6, 274);
             this.bAddInstruction.Name = "bAddInstruction";
             this.bAddInstruction.SeparateDropdownButton = false;
-            this.bAddInstruction.Size = new System.Drawing.Size(105, 23);
+            this.bAddInstruction.Size = new System.Drawing.Size(115, 23);
             this.bAddInstruction.SplitMenu = this.cmnuAddInstruction;
             this.bAddInstruction.TabIndex = 3;
             this.bAddInstruction.Text = "Add instruction";
@@ -879,7 +881,7 @@ namespace Ketarin.Forms
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(3, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(150, 13);
+            this.label1.Size = new System.Drawing.Size(171, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "I&nstructions to follow for setup:";
             // 
@@ -894,7 +896,7 @@ namespace Ketarin.Forms
             this.instructionsListBox.Location = new System.Drawing.Point(6, 25);
             this.instructionsListBox.Name = "instructionsListBox";
             this.instructionsListBox.SelectedPanel = null;
-            this.instructionsListBox.Size = new System.Drawing.Size(363, 243);
+            this.instructionsListBox.Size = new System.Drawing.Size(485, 243);
             this.instructionsListBox.TabIndex = 0;
             // 
             // bSaveAsDefault
@@ -912,11 +914,12 @@ namespace Ketarin.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(407, 391);
+            this.ClientSize = new System.Drawing.Size(529, 391);
             this.Controls.Add(this.bSaveAsDefault);
             this.Controls.Add(this.tcApplication);
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.bOK);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(423, 429);

@@ -68,17 +68,17 @@ namespace Ketarin.Forms
             this.lblColName.AutoSize = true;
             this.lblColName.Location = new System.Drawing.Point(12, 15);
             this.lblColName.Name = "lblColName";
-            this.lblColName.Size = new System.Drawing.Size(74, 13);
+            this.lblColName.Size = new System.Drawing.Size(81, 13);
             this.lblColName.TabIndex = 0;
             this.lblColName.Text = "Column &name:";
             // 
             // txtColumnName
             // 
-            this.txtColumnName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtColumnName.Location = new System.Drawing.Point(92, 12);
+            this.txtColumnName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtColumnName.Location = new System.Drawing.Point(99, 12);
             this.txtColumnName.Name = "txtColumnName";
-            this.txtColumnName.Size = new System.Drawing.Size(218, 20);
+            this.txtColumnName.Size = new System.Drawing.Size(211, 22);
             this.txtColumnName.TabIndex = 1;
             // 
             // lblColValue
@@ -86,17 +86,17 @@ namespace Ketarin.Forms
             this.lblColValue.AutoSize = true;
             this.lblColValue.Location = new System.Drawing.Point(12, 41);
             this.lblColValue.Name = "lblColValue";
-            this.lblColValue.Size = new System.Drawing.Size(74, 13);
+            this.lblColValue.Size = new System.Drawing.Size(80, 13);
             this.lblColValue.TabIndex = 2;
             this.lblColValue.Text = "Column &value:";
             // 
             // txtColumnValue
             // 
-            this.txtColumnValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtColumnValue.Location = new System.Drawing.Point(92, 38);
+            this.txtColumnValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtColumnValue.Location = new System.Drawing.Point(98, 38);
             this.txtColumnValue.Name = "txtColumnValue";
-            this.txtColumnValue.Size = new System.Drawing.Size(218, 20);
+            this.txtColumnValue.Size = new System.Drawing.Size(212, 22);
             this.txtColumnValue.TabIndex = 3;
             this.txtColumnValue.TextChanged += new System.EventHandler(this.txtColumnValue_TextChanged);
             // 
@@ -105,11 +105,11 @@ namespace Ketarin.Forms
             this.lblExample.AutoSize = true;
             this.lblExample.Location = new System.Drawing.Point(89, 61);
             this.lblExample.Name = "lblExample";
-            this.lblExample.Size = new System.Drawing.Size(155, 13);
+            this.lblExample.Size = new System.Drawing.Size(168, 13);
             this.lblExample.TabIndex = 6;
             this.lblExample.Text = "Example: {filesize:formatfilesize}";
             // 
-            // AddCustomColumn
+            // AddCustomColumnDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -121,10 +121,11 @@ namespace Ketarin.Forms
             this.Controls.Add(this.lblColName);
             this.Controls.Add(this.bOK);
             this.Controls.Add(this.bCancel);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "AddCustomColumn";
+            this.Name = "AddCustomColumnDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

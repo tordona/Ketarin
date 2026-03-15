@@ -66,5 +66,16 @@ namespace Ketarin
             TextFormatFlags flags = (this.hintTextAlign == HorizontalAlign.Left) ? TextFormatFlags.Left : TextFormatFlags.Right;
             TextRenderer.DrawText(e.Graphics, this.hintText, this.Font, new Rectangle(0, 1, Width, Height), Color.Gray, flags);
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // HintTextBox
+            // 
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ResumeLayout(false);
+
+        }
     }
 }

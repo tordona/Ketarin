@@ -37,11 +37,11 @@ namespace Ketarin.Forms
             // 
             // bCancel
             // 
-            this.bCancel.Location = new System.Drawing.Point(392, 60);
+            this.bCancel.Location = new System.Drawing.Point(501, 60);
             // 
             // bOK
             // 
-            this.bOK.Location = new System.Drawing.Point(311, 60);
+            this.bOK.Location = new System.Drawing.Point(420, 60);
             this.bOK.Click += new System.EventHandler(this.bOK_Click);
             // 
             // lnlProcessName
@@ -49,27 +49,28 @@ namespace Ketarin.Forms
             this.lnlProcessName.AutoSize = true;
             this.lnlProcessName.Location = new System.Drawing.Point(12, 15);
             this.lnlProcessName.Name = "lnlProcessName";
-            this.lnlProcessName.Size = new System.Drawing.Size(213, 13);
+            this.lnlProcessName.Size = new System.Drawing.Size(236, 13);
             this.lnlProcessName.TabIndex = 0;
             this.lnlProcessName.Text = "&Close all processes with the following name:";
             // 
             // cboProcessName
             // 
-            this.cboProcessName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboProcessName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboProcessName.FormattingEnabled = true;
-            this.cboProcessName.Location = new System.Drawing.Point(231, 12);
+            this.cboProcessName.Location = new System.Drawing.Point(254, 12);
             this.cboProcessName.Name = "cboProcessName";
-            this.cboProcessName.Size = new System.Drawing.Size(236, 21);
+            this.cboProcessName.Size = new System.Drawing.Size(322, 21);
             this.cboProcessName.TabIndex = 1;
             // 
             // CloseProcessInstructionDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(479, 95);
+            this.ClientSize = new System.Drawing.Size(588, 95);
             this.Controls.Add(this.lnlProcessName);
             this.Controls.Add(this.cboProcessName);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "CloseProcessInstructionDialog";
             this.Text = "Close Process";

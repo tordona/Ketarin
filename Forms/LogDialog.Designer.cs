@@ -30,6 +30,7 @@ namespace Ketarin.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogDialog));
             this.txtLog = new Ketarin.Forms.TextBox();
             this.contextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuClearLog = new System.Windows.Forms.MenuItem();
@@ -37,16 +38,18 @@ namespace Ketarin.Forms
             // 
             // txtLog
             // 
-            this.txtLog.BackColor = System.Drawing.Color.Black;
+            this.txtLog.BackColor = System.Drawing.SystemColors.Window;
+            this.txtLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtLog.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLog.ForeColor = System.Drawing.Color.White;
-            this.txtLog.Location = new System.Drawing.Point(0, 0);
+            this.txtLog.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLog.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.txtLog.Location = new System.Drawing.Point(6, 6);
+            this.txtLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(464, 264);
+            this.txtLog.Size = new System.Drawing.Size(529, 293);
             this.txtLog.TabIndex = 1;
             this.txtLog.WordWrap = false;
             // 
@@ -64,16 +67,17 @@ namespace Ketarin.Forms
             // 
             // LogDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 264);
+            this.ClientSize = new System.Drawing.Size(541, 305);
             this.Controls.Add(this.txtLog);
-            this.MinimizeBox = false;
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "LogDialog";
+            this.Padding = new System.Windows.Forms.Padding(6);
             this.SavePosition = true;
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.Text = "Log";
+            this.Text = "Kertarin Log";
             this.ResumeLayout(false);
             this.PerformLayout();
 

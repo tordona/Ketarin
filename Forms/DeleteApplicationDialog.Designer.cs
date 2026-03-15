@@ -41,8 +41,8 @@ namespace Ketarin.Forms
             // 
             // lblQuestion
             // 
-            this.lblQuestion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblQuestion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblQuestion.Location = new System.Drawing.Point(50, 12);
             this.lblQuestion.Name = "lblQuestion";
             this.lblQuestion.Size = new System.Drawing.Size(328, 32);
@@ -54,7 +54,7 @@ namespace Ketarin.Forms
             // 
             this.bDeleteApplication.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bDeleteApplication.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bDeleteApplication.Location = new System.Drawing.Point(40, 60);
+            this.bDeleteApplication.Location = new System.Drawing.Point(12, 60);
             this.bDeleteApplication.Name = "bDeleteApplication";
             this.bDeleteApplication.Size = new System.Drawing.Size(104, 23);
             this.bDeleteApplication.TabIndex = 1;
@@ -65,9 +65,9 @@ namespace Ketarin.Forms
             // 
             this.bDeleteApplicationAndFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bDeleteApplicationAndFile.DialogResult = System.Windows.Forms.DialogResult.Yes;
-            this.bDeleteApplicationAndFile.Location = new System.Drawing.Point(150, 60);
+            this.bDeleteApplicationAndFile.Location = new System.Drawing.Point(122, 60);
             this.bDeleteApplicationAndFile.Name = "bDeleteApplicationAndFile";
-            this.bDeleteApplicationAndFile.Size = new System.Drawing.Size(147, 23);
+            this.bDeleteApplicationAndFile.Size = new System.Drawing.Size(175, 23);
             this.bDeleteApplicationAndFile.TabIndex = 2;
             this.bDeleteApplicationAndFile.Text = "&Delete application and file";
             this.bDeleteApplicationAndFile.UseVisualStyleBackColor = true;
@@ -101,6 +101,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.bDeleteApplicationAndFile);
             this.Controls.Add(this.bDeleteApplication);
             this.Controls.Add(this.lblQuestion);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;

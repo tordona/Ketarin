@@ -38,6 +38,7 @@ namespace Ketarin.Forms
             this.cmnuCommand = new System.Windows.Forms.ContextMenu();
             this.mnuBatchScript = new System.Windows.Forms.MenuItem();
             this.mnuCSScript = new System.Windows.Forms.MenuItem();
+            this.mnuPowerShell = new System.Windows.Forms.MenuItem();
             this.sepRun = new System.Windows.Forms.MenuItem();
             this.mnuValidate = new System.Windows.Forms.MenuItem();
             this.mnuRun = new System.Windows.Forms.MenuItem();
@@ -59,8 +60,7 @@ namespace Ketarin.Forms
             this.mnuSelectAll = new System.Windows.Forms.MenuItem();
             this.txtBorder = new System.Windows.Forms.TextBox();
             this.bCommand = new wyDay.Controls.SplitButton();
-            this.txtCode = new Scintilla();
-            this.mnuPowerShell = new System.Windows.Forms.MenuItem();
+            this.txtCode = new ScintillaNET.Scintilla();
             this.SuspendLayout();
             // 
             // cmnuCommand
@@ -102,6 +102,12 @@ namespace Ketarin.Forms
             this.mnuCSScript.RadioCheck = true;
             this.mnuCSScript.Text = "C&# script";
             this.mnuCSScript.Click += new System.EventHandler(this.mnuCSScript_Click);
+            // 
+            // mnuPowerShell
+            // 
+            this.mnuPowerShell.Index = 2;
+            this.mnuPowerShell.Text = "&PowerShell script";
+            this.mnuPowerShell.Click += new System.EventHandler(this.mnuPowerShell_Click);
             // 
             // sepRun
             // 
@@ -231,17 +237,6 @@ namespace Ketarin.Forms
             this.txtBorder.TabIndex = 2;
             this.txtBorder.TabStop = false;
             // 
-            // txtCode
-            // 
-            this.txtCode.Anchor = ((AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom)
-                        | AnchorStyles.Left)
-                        | AnchorStyles.Right)));
-            this.txtCode.Location = new Point(1, 1);
-            this.txtCode.Name = "txtCode";
-            this.txtCode.Margins[0].Width = 17;
-            this.txtCode.Size = new Size(514, 192);
-            this.txtCode.TabIndex = 0;
-            // 
             // bCommand
             // 
             this.bCommand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -249,23 +244,29 @@ namespace Ketarin.Forms
             this.bCommand.Location = new System.Drawing.Point(0, 200);
             this.bCommand.Name = "bCommand";
             this.bCommand.SeparateDropdownButton = false;
-            this.bCommand.Size = new System.Drawing.Size(82, 23);
+            this.bCommand.Size = new System.Drawing.Size(87, 23);
             this.bCommand.SplitMenu = this.cmnuCommand;
             this.bCommand.TabIndex = 1;
             this.bCommand.Text = "&Command";
             this.bCommand.UseVisualStyleBackColor = true;
             // 
-            // mnuPowerShell
+            // txtCode
             // 
-            this.mnuPowerShell.Index = 2;
-            this.mnuPowerShell.Text = "&PowerShell script";
-            this.mnuPowerShell.Click += new System.EventHandler(this.mnuPowerShell_Click);
+            this.txtCode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCode.AutoCMaxHeight = 9;
+            this.txtCode.Location = new System.Drawing.Point(1, 1);
+            this.txtCode.Name = "txtCode";
+            this.txtCode.Size = new System.Drawing.Size(514, 192);
+            this.txtCode.TabIndex = 0;
             // 
             // CommandControl
             // 
             this.Controls.Add(this.txtCode);
             this.Controls.Add(this.bCommand);
             this.Controls.Add(this.txtBorder);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "CommandControl";
             this.Size = new System.Drawing.Size(517, 223);

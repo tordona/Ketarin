@@ -32,7 +32,7 @@ namespace Ketarin.Forms
         private void InitializeComponent()
         {
             this.lblVariableName = new System.Windows.Forms.Label();
-            this.txtVariableName = new VariableTextBox();
+            this.txtVariableName = new Ketarin.Forms.VariableTextBox();
             this.bCancel = new System.Windows.Forms.Button();
             this.bOK = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -42,17 +42,17 @@ namespace Ketarin.Forms
             this.lblVariableName.AutoSize = true;
             this.lblVariableName.Location = new System.Drawing.Point(12, 15);
             this.lblVariableName.Name = "lblVariableName";
-            this.lblVariableName.Size = new System.Drawing.Size(77, 13);
+            this.lblVariableName.Size = new System.Drawing.Size(82, 13);
             this.lblVariableName.TabIndex = 0;
             this.lblVariableName.Text = "&Variable name:";
             // 
             // txtVariableName
             // 
-            this.txtVariableName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtVariableName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtVariableName.Location = new System.Drawing.Point(95, 12);
             this.txtVariableName.Name = "txtVariableName";
-            this.txtVariableName.Size = new System.Drawing.Size(133, 20);
+            this.txtVariableName.Size = new System.Drawing.Size(133, 22);
             this.txtVariableName.TabIndex = 1;
             this.txtVariableName.TextChanged += new System.EventHandler(this.txtVariableName_TextChanged);
             // 
@@ -88,6 +88,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.txtVariableName);
             this.Controls.Add(this.lblVariableName);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;

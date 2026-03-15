@@ -38,16 +38,16 @@ namespace Ketarin.Forms
             this.lblVersionDesc = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblAuthor = new System.Windows.Forms.Label();
+            this.lblDatabasePath = new CDBurnerXP.Controls.WebLink();
             this.lblDatabase = new System.Windows.Forms.Label();
+            this.webLink1 = new CDBurnerXP.Controls.WebLink();
             this.lblVersion = new System.Windows.Forms.Label();
+            this.lnkGPL = new CDBurnerXP.Controls.WebLink();
             this.lblLicense = new System.Windows.Forms.Label();
             this.lblImagesExcluded = new System.Windows.Forms.Label();
             this.lblWebsite = new System.Windows.Forms.Label();
             this.txtAuthor = new System.Windows.Forms.TextBox();
             this.picIcon = new System.Windows.Forms.PictureBox();
-            this.lblDatabasePath = new CDBurnerXP.Controls.WebLink();
-            this.webLink1 = new CDBurnerXP.Controls.WebLink();
-            this.lnkGPL = new CDBurnerXP.Controls.WebLink();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
             this.SuspendLayout();
@@ -67,7 +67,7 @@ namespace Ketarin.Forms
             this.lblInfo.AutoSize = true;
             this.lblInfo.Location = new System.Drawing.Point(67, 9);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(227, 13);
+            this.lblInfo.Size = new System.Drawing.Size(245, 13);
             this.lblInfo.TabIndex = 1;
             this.lblInfo.Text = "Ketarin: Keep your setup packages up-to-date.";
             // 
@@ -77,7 +77,7 @@ namespace Ketarin.Forms
             this.lblVersionDesc.Location = new System.Drawing.Point(3, 0);
             this.lblVersionDesc.Name = "lblVersionDesc";
             this.lblVersionDesc.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
-            this.lblVersionDesc.Size = new System.Drawing.Size(47, 17);
+            this.lblVersionDesc.Size = new System.Drawing.Size(50, 17);
             this.lblVersionDesc.TabIndex = 2;
             this.lblVersionDesc.Text = "Version:";
             // 
@@ -114,31 +114,68 @@ namespace Ketarin.Forms
             // lblAuthor
             // 
             this.lblAuthor.AutoSize = true;
-            this.lblAuthor.Location = new System.Drawing.Point(3, 104);
+            this.lblAuthor.Location = new System.Drawing.Point(3, 107);
             this.lblAuthor.Name = "lblAuthor";
             this.lblAuthor.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
-            this.lblAuthor.Size = new System.Drawing.Size(43, 17);
+            this.lblAuthor.Size = new System.Drawing.Size(48, 17);
             this.lblAuthor.TabIndex = 10;
             this.lblAuthor.Text = "&Author:";
+            // 
+            // lblDatabasePath
+            // 
+            this.lblDatabasePath.AutoSize = true;
+            this.lblDatabasePath.Location = new System.Drawing.Point(69, 90);
+            this.lblDatabasePath.Margin = new System.Windows.Forms.Padding(3, 0, 6, 0);
+            this.lblDatabasePath.Name = "lblDatabasePath";
+            this.lblDatabasePath.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this.lblDatabasePath.Size = new System.Drawing.Size(0, 15);
+            this.lblDatabasePath.TabIndex = 9;
+            this.lblDatabasePath.Url = "";
             // 
             // lblDatabase
             // 
             this.lblDatabase.AutoSize = true;
-            this.lblDatabase.Location = new System.Drawing.Point(3, 87);
+            this.lblDatabase.Location = new System.Drawing.Point(3, 90);
             this.lblDatabase.Name = "lblDatabase";
             this.lblDatabase.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
-            this.lblDatabase.Size = new System.Drawing.Size(58, 17);
+            this.lblDatabase.Size = new System.Drawing.Size(60, 17);
             this.lblDatabase.TabIndex = 8;
             this.lblDatabase.Text = "Database:";
+            // 
+            // webLink1
+            // 
+            this.webLink1.AutoSize = true;
+            this.webLink1.Location = new System.Drawing.Point(69, 73);
+            this.webLink1.Name = "webLink1";
+            this.webLink1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this.webLink1.Size = new System.Drawing.Size(162, 15);
+            this.webLink1.TabIndex = 7;
+            this.webLink1.TabStop = true;
+            this.webLink1.Text = "http://ketarin.canneverbe.com";
+            this.webLink1.Url = "http://ketarin.canneverbe.com";
             // 
             // lblVersion
             // 
             this.lblVersion.AutoSize = true;
-            this.lblVersion.Location = new System.Drawing.Point(67, 0);
+            this.lblVersion.Location = new System.Drawing.Point(69, 0);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
             this.lblVersion.Size = new System.Drawing.Size(2, 17);
             this.lblVersion.TabIndex = 3;
+            // 
+            // lnkGPL
+            // 
+            this.lnkGPL.AutoSize = true;
+            this.lnkGPL.LinkArea = new System.Windows.Forms.LinkArea(0, 29);
+            this.lnkGPL.Location = new System.Drawing.Point(69, 17);
+            this.lnkGPL.Name = "lnkGPL";
+            this.lnkGPL.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
+            this.lnkGPL.Size = new System.Drawing.Size(70, 24);
+            this.lnkGPL.TabIndex = 4;
+            this.lnkGPL.TabStop = true;
+            this.lnkGPL.Text = "GNU GPL v.2";
+            this.lnkGPL.Url = "http://www.gnu.org/licenses/gpl-2.0.txt";
+            this.lnkGPL.UseCompatibleTextRendering = true;
             // 
             // lblLicense
             // 
@@ -155,19 +192,19 @@ namespace Ketarin.Forms
             this.lblImagesExcluded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblImagesExcluded.Location = new System.Drawing.Point(67, 38);
+            this.lblImagesExcluded.Location = new System.Drawing.Point(69, 41);
             this.lblImagesExcluded.Name = "lblImagesExcluded";
-            this.lblImagesExcluded.Size = new System.Drawing.Size(260, 32);
+            this.lblImagesExcluded.Size = new System.Drawing.Size(258, 32);
             this.lblImagesExcluded.TabIndex = 5;
             this.lblImagesExcluded.Text = "This excludes the used icons, which are copyrighted by  VirtualLNK, LLC.";
             // 
             // lblWebsite
             // 
             this.lblWebsite.AutoSize = true;
-            this.lblWebsite.Location = new System.Drawing.Point(3, 70);
+            this.lblWebsite.Location = new System.Drawing.Point(3, 73);
             this.lblWebsite.Name = "lblWebsite";
             this.lblWebsite.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
-            this.lblWebsite.Size = new System.Drawing.Size(51, 17);
+            this.lblWebsite.Size = new System.Drawing.Size(54, 17);
             this.lblWebsite.TabIndex = 6;
             this.lblWebsite.Text = "Website:";
             // 
@@ -176,10 +213,10 @@ namespace Ketarin.Forms
             this.txtAuthor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAuthor.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtAuthor.Location = new System.Drawing.Point(67, 107);
+            this.txtAuthor.Location = new System.Drawing.Point(69, 110);
             this.txtAuthor.Name = "txtAuthor";
             this.txtAuthor.ReadOnly = true;
-            this.txtAuthor.Size = new System.Drawing.Size(260, 13);
+            this.txtAuthor.Size = new System.Drawing.Size(258, 15);
             this.txtAuthor.TabIndex = 11;
             // 
             // picIcon
@@ -191,43 +228,6 @@ namespace Ketarin.Forms
             this.picIcon.TabIndex = 7;
             this.picIcon.TabStop = false;
             // 
-            // lblDatabasePath
-            // 
-            this.lblDatabasePath.AutoSize = true;
-            this.lblDatabasePath.Location = new System.Drawing.Point(67, 87);
-            this.lblDatabasePath.Margin = new System.Windows.Forms.Padding(3, 0, 6, 0);
-            this.lblDatabasePath.Name = "lblDatabasePath";
-            this.lblDatabasePath.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.lblDatabasePath.Size = new System.Drawing.Size(0, 15);
-            this.lblDatabasePath.TabIndex = 9;
-            this.lblDatabasePath.Url = "";
-            // 
-            // webLink1
-            // 
-            this.webLink1.AutoSize = true;
-            this.webLink1.Location = new System.Drawing.Point(67, 70);
-            this.webLink1.Name = "webLink1";
-            this.webLink1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.webLink1.Size = new System.Drawing.Size(153, 15);
-            this.webLink1.TabIndex = 7;
-            this.webLink1.TabStop = true;
-            this.webLink1.Text = "http://ketarin.canneverbe.com";
-            this.webLink1.Url = "http://ketarin.canneverbe.com";
-            // 
-            // lnkGPL
-            // 
-            this.lnkGPL.AutoSize = true;
-            this.lnkGPL.LinkArea = new System.Windows.Forms.LinkArea(0, 29);
-            this.lnkGPL.Location = new System.Drawing.Point(67, 17);
-            this.lnkGPL.Name = "lnkGPL";
-            this.lnkGPL.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
-            this.lnkGPL.Size = new System.Drawing.Size(75, 21);
-            this.lnkGPL.TabIndex = 4;
-            this.lnkGPL.TabStop = true;
-            this.lnkGPL.Text = "GNU GPL v.2";
-            this.lnkGPL.Url = "http://www.gnu.org/licenses/gpl-2.0.txt";
-            this.lnkGPL.UseCompatibleTextRendering = true;
-            // 
             // AboutDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -237,6 +237,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.bClose);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;

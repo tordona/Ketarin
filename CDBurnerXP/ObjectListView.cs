@@ -547,7 +547,7 @@ namespace CDBurnerXP.Controls
             get
             {
                 if (this.EmptyListMsgFont == null)
-                    return new Font("Tahoma", 14);
+                    return new Font("Segoe UI", 14);
                 else
                     return this.EmptyListMsgFont;
             }

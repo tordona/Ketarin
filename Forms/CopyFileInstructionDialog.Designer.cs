@@ -56,17 +56,17 @@ namespace Ketarin.Forms
             this.lblSource.AutoSize = true;
             this.lblSource.Location = new System.Drawing.Point(12, 15);
             this.lblSource.Name = "lblSource";
-            this.lblSource.Size = new System.Drawing.Size(60, 13);
+            this.lblSource.Size = new System.Drawing.Size(64, 13);
             this.lblSource.TabIndex = 0;
             this.lblSource.Text = "&Source file:";
             // 
             // txtSource
             // 
-            this.txtSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSource.Location = new System.Drawing.Point(78, 12);
             this.txtSource.Name = "txtSource";
-            this.txtSource.Size = new System.Drawing.Size(296, 20);
+            this.txtSource.Size = new System.Drawing.Size(296, 22);
             this.txtSource.TabIndex = 1;
             this.txtSource.Text = "{file}";
             // 
@@ -75,27 +75,27 @@ namespace Ketarin.Forms
             this.lblTarget.AutoSize = true;
             this.lblTarget.Location = new System.Drawing.Point(12, 41);
             this.lblTarget.Name = "lblTarget";
-            this.lblTarget.Size = new System.Drawing.Size(57, 13);
+            this.lblTarget.Size = new System.Drawing.Size(60, 13);
             this.lblTarget.TabIndex = 2;
             this.lblTarget.Text = "&Target file:";
             // 
             // txtTarget
             // 
-            this.txtTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTarget.Location = new System.Drawing.Point(78, 38);
             this.txtTarget.Name = "txtTarget";
-            this.txtTarget.Size = new System.Drawing.Size(198, 20);
+            this.txtTarget.Size = new System.Drawing.Size(190, 22);
             this.txtTarget.TabIndex = 3;
             // 
             // bInsertArgument
             // 
             this.bInsertArgument.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bInsertArgument.AutoSize = true;
-            this.bInsertArgument.Location = new System.Drawing.Point(280, 36);
+            this.bInsertArgument.Location = new System.Drawing.Point(274, 36);
             this.bInsertArgument.Name = "bInsertArgument";
             this.bInsertArgument.SeparateDropdownButton = false;
-            this.bInsertArgument.Size = new System.Drawing.Size(94, 23);
+            this.bInsertArgument.Size = new System.Drawing.Size(100, 23);
             this.bInsertArgument.SplitMenu = this.environmentMenu;
             this.bInsertArgument.TabIndex = 4;
             this.bInsertArgument.Text = "&Environment";

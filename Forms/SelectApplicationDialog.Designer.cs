@@ -36,7 +36,7 @@ namespace Ketarin.Forms
             this.bOK = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.olvApplications = new Ketarin.ApplicationJobsListView();
-            this.colAppName = new CDBurnerXP.Controls.OLVColumn();
+            this.colAppName = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.olvApplications)).BeginInit();
             this.SuspendLayout();
             // 
@@ -68,7 +68,7 @@ namespace Ketarin.Forms
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 13);
+            this.label1.Size = new System.Drawing.Size(111, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "&Applications to add:";
             // 
@@ -78,14 +78,15 @@ namespace Ketarin.Forms
             this.olvApplications.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvApplications.AlwaysGroupByColumn = null;
             this.olvApplications.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvApplications.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.olvApplications.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.olvApplications.CheckBoxes = true;
             this.olvApplications.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colAppName});
             this.olvApplications.FullRowSelect = true;
             this.olvApplications.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.olvApplications.HideSelection = false;
             this.olvApplications.HighlightBackgroundColor = System.Drawing.Color.Empty;
             this.olvApplications.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.olvApplications.LastSortColumn = null;
@@ -103,6 +104,7 @@ namespace Ketarin.Forms
             // 
             this.colAppName.AspectName = "Name";
             this.colAppName.FillsFreeSpace = true;
+            this.colAppName.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colAppName.Text = "Application name";
             this.colAppName.Width = 100;
             // 
@@ -115,6 +117,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.olvApplications);
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.bOK);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 400);

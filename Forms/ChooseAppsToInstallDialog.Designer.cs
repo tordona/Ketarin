@@ -40,11 +40,11 @@ namespace Ketarin.Forms
             this.mnuInstallOnly = new System.Windows.Forms.MenuItem();
             this.mnuUpdateAndInstall = new System.Windows.Forms.MenuItem();
             this.olvLists = new CDBurnerXP.Controls.ObjectListView();
-            this.colListName = new CDBurnerXP.Controls.OLVColumn();
-            this.colListAppNames = new CDBurnerXP.Controls.OLVColumn();
+            this.colListName = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
+            this.colListAppNames = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
             this.imlLists = new System.Windows.Forms.ImageList(this.components);
             this.olvApps = new CDBurnerXP.Controls.FastObjectListView();
-            this.colAppsName = new CDBurnerXP.Controls.OLVColumn();
+            this.colAppsName = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
             this.lblAppLists = new System.Windows.Forms.Label();
             this.lblAppsInCurrentList = new System.Windows.Forms.Label();
             this.bNewList = new System.Windows.Forms.Button();
@@ -123,9 +123,9 @@ namespace Ketarin.Forms
             this.olvLists.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvLists.AlwaysGroupByColumn = null;
             this.olvLists.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvLists.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.olvLists.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.olvLists.CellEditActivation = CDBurnerXP.Controls.ObjectListView.CellEditActivateMode.F2Only;
             this.olvLists.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colListName,
@@ -145,17 +145,18 @@ namespace Ketarin.Forms
             this.olvLists.TabIndex = 1;
             this.olvLists.UseCompatibleStateImageBehavior = false;
             this.olvLists.View = System.Windows.Forms.View.Tile;
-            this.olvLists.KeyDown += new System.Windows.Forms.KeyEventHandler(this.olvLists_KeyDown);
             this.olvLists.CellEditStarting += new CDBurnerXP.Controls.ObjectListView.CellEditEventHandler(this.olvLists_CellEditStarting);
             this.olvLists.CellEditFinished += new CDBurnerXP.Controls.ObjectListView.CellEditEventHandler(this.olvLists_CellEditFinished);
-            this.olvLists.DragDrop += new System.Windows.Forms.DragEventHandler(this.olvLists_DragDrop);
             this.olvLists.SelectedIndexChanged += new System.EventHandler(this.olvLists_SelectedIndexChanged);
-            this.olvLists.DragOver += new System.Windows.Forms.DragEventHandler(this.olvLists_DragOver);
+            this.olvLists.DragDrop += new System.Windows.Forms.DragEventHandler(this.olvLists_DragDrop);
             this.olvLists.DragEnter += new System.Windows.Forms.DragEventHandler(this.olvLists_DragEnter);
+            this.olvLists.DragOver += new System.Windows.Forms.DragEventHandler(this.olvLists_DragOver);
+            this.olvLists.KeyDown += new System.Windows.Forms.KeyEventHandler(this.olvLists_KeyDown);
             // 
             // colListName
             // 
             this.colListName.AspectName = "Name";
+            this.colListName.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colListName.IsTileViewColumn = true;
             this.colListName.Text = "Name";
             this.colListName.Width = 80;
@@ -163,6 +164,7 @@ namespace Ketarin.Forms
             // colListAppNames
             // 
             this.colListAppNames.AspectName = "ApplicationNames";
+            this.colListAppNames.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colListAppNames.IsTileViewColumn = true;
             this.colListAppNames.Text = "Applications";
             this.colListAppNames.Width = 80;
@@ -179,9 +181,9 @@ namespace Ketarin.Forms
             this.olvApps.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvApps.AlwaysGroupByColumn = null;
             this.olvApps.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvApps.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.olvApps.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.olvApps.CheckBoxes = true;
             this.olvApps.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colAppsName});
@@ -203,14 +205,15 @@ namespace Ketarin.Forms
             this.olvApps.UseCompatibleStateImageBehavior = false;
             this.olvApps.View = System.Windows.Forms.View.Details;
             this.olvApps.VirtualMode = true;
-            this.olvApps.KeyDown += new System.Windows.Forms.KeyEventHandler(this.olvApps_KeyDown);
             this.olvApps.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.olvApps_ItemDrag);
             this.olvApps.SelectedIndexChanged += new System.EventHandler(this.olvApps_SelectedIndexChanged);
+            this.olvApps.KeyDown += new System.Windows.Forms.KeyEventHandler(this.olvApps_KeyDown);
             // 
             // colAppsName
             // 
             this.colAppsName.AspectName = "Name";
             this.colAppsName.FillsFreeSpace = true;
+            this.colAppsName.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colAppsName.Text = "Name";
             this.colAppsName.Width = 120;
             // 
@@ -219,7 +222,7 @@ namespace Ketarin.Forms
             this.lblAppLists.AutoSize = true;
             this.lblAppLists.Location = new System.Drawing.Point(-3, 0);
             this.lblAppLists.Name = "lblAppLists";
-            this.lblAppLists.Size = new System.Drawing.Size(185, 13);
+            this.lblAppLists.Size = new System.Drawing.Size(212, 13);
             this.lblAppLists.TabIndex = 0;
             this.lblAppLists.Text = "In&stall the following list of applications:";
             // 
@@ -228,7 +231,7 @@ namespace Ketarin.Forms
             this.lblAppsInCurrentList.AutoSize = true;
             this.lblAppsInCurrentList.Location = new System.Drawing.Point(-3, 0);
             this.lblAppsInCurrentList.Name = "lblAppsInCurrentList";
-            this.lblAppsInCurrentList.Size = new System.Drawing.Size(181, 13);
+            this.lblAppsInCurrentList.Size = new System.Drawing.Size(203, 13);
             this.lblAppsInCurrentList.TabIndex = 0;
             this.lblAppsInCurrentList.Text = "Inst&all these applications from the list:";
             // 
@@ -262,7 +265,7 @@ namespace Ketarin.Forms
             this.bSelectApp.Location = new System.Drawing.Point(138, 302);
             this.bSelectApp.Name = "bSelectApp";
             this.bSelectApp.SeparateDropdownButton = false;
-            this.bSelectApp.Size = new System.Drawing.Size(80, 23);
+            this.bSelectApp.Size = new System.Drawing.Size(82, 23);
             this.bSelectApp.SplitMenu = this.selectionMenu;
             this.bSelectApp.TabIndex = 4;
             this.bSelectApp.Text = "Sele&ction";
@@ -331,9 +334,9 @@ namespace Ketarin.Forms
             // 
             // tableLayoutPanel
             // 
-            this.tableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel.ColumnCount = 2;
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -376,8 +379,8 @@ namespace Ketarin.Forms
             // 
             // lblUndoDelete
             // 
-            this.lblUndoDelete.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblUndoDelete.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblUndoDelete.BackColor = System.Drawing.SystemColors.Info;
             this.lblUndoDelete.Location = new System.Drawing.Point(1, 277);
             this.lblUndoDelete.Name = "lblUndoDelete";
@@ -418,6 +421,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.tableLayoutPanel);
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.bOK);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(480, 300);
             this.Name = "ChooseAppsToInstallDialog";

@@ -65,17 +65,17 @@ namespace Ketarin.Forms
             this.lblVariableName.AutoSize = true;
             this.lblVariableName.Location = new System.Drawing.Point(12, 15);
             this.lblVariableName.Name = "lblVariableName";
-            this.lblVariableName.Size = new System.Drawing.Size(75, 13);
+            this.lblVariableName.Size = new System.Drawing.Size(81, 13);
             this.lblVariableName.TabIndex = 5;
             this.lblVariableName.Text = "&Snippet name:";
             // 
             // txtScriptName
             // 
-            this.txtScriptName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtScriptName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtScriptName.Location = new System.Drawing.Point(93, 12);
             this.txtScriptName.Name = "txtScriptName";
-            this.txtScriptName.Size = new System.Drawing.Size(177, 20);
+            this.txtScriptName.Size = new System.Drawing.Size(177, 22);
             this.txtScriptName.TabIndex = 6;
             this.txtScriptName.TextChanged += new System.EventHandler(this.txtScriptName_TextChanged);
             // 
@@ -88,6 +88,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.txtScriptName);
             this.Controls.Add(this.lblVariableName);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;

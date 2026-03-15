@@ -42,17 +42,17 @@ namespace Ketarin.Forms
             this.lblFileName.AutoSize = true;
             this.lblFileName.Location = new System.Drawing.Point(12, 15);
             this.lblFileName.Name = "lblFileName";
-            this.lblFileName.Size = new System.Drawing.Size(55, 13);
+            this.lblFileName.Size = new System.Drawing.Size(59, 13);
             this.lblFileName.TabIndex = 0;
             this.lblFileName.Text = "&File name:";
             // 
             // txtFileName
             // 
-            this.txtFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFileName.Location = new System.Drawing.Point(73, 12);
             this.txtFileName.Name = "txtFileName";
-            this.txtFileName.Size = new System.Drawing.Size(199, 20);
+            this.txtFileName.Size = new System.Drawing.Size(199, 22);
             this.txtFileName.TabIndex = 1;
             // 
             // bOK
@@ -87,6 +87,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.bOK);
             this.Controls.Add(this.txtFileName);
             this.Controls.Add(this.lblFileName);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;

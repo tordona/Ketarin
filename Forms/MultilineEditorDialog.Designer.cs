@@ -65,7 +65,7 @@ namespace Ketarin.Forms
             this.chkWordWrap.AutoSize = true;
             this.chkWordWrap.Location = new System.Drawing.Point(12, 221);
             this.chkWordWrap.Name = "chkWordWrap";
-            this.chkWordWrap.Size = new System.Drawing.Size(78, 17);
+            this.chkWordWrap.Size = new System.Drawing.Size(84, 17);
             this.chkWordWrap.TabIndex = 1;
             this.chkWordWrap.Text = "&Word wrap";
             this.chkWordWrap.UseVisualStyleBackColor = true;
@@ -74,9 +74,10 @@ namespace Ketarin.Forms
             // txtValue
             // 
             this.txtValue.AcceptsReturn = true;
-            this.txtValue.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtValue.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtValue.EnableEditor = false;
             this.txtValue.Location = new System.Drawing.Point(12, 12);
             this.txtValue.Multiline = true;
@@ -95,6 +96,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.chkWordWrap);
             this.Controls.Add(this.bOK);
             this.Controls.Add(this.bCancel);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 200);
             this.Name = "MultilineEditorDialog";
