@@ -1,5 +1,7 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11605.240 stable
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSSH", "SharpSSH\SharpSSH.csproj", "{D27CF69D-4681-492A-BE4D-D3D209104423}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples", "Examples\Examples.csproj", "{327E25D4-D8DF-4704-ABA3-274F8E777847}"
@@ -7,17 +9,27 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM64 = Debug|ARM64
 		Release|Any CPU = Release|Any CPU
+		Release|ARM64 = Release|ARM64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D27CF69D-4681-492A-BE4D-D3D209104423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D27CF69D-4681-492A-BE4D-D3D209104423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D27CF69D-4681-492A-BE4D-D3D209104423}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{D27CF69D-4681-492A-BE4D-D3D209104423}.Debug|ARM64.Build.0 = Debug|ARM64
 		{D27CF69D-4681-492A-BE4D-D3D209104423}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D27CF69D-4681-492A-BE4D-D3D209104423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D27CF69D-4681-492A-BE4D-D3D209104423}.Release|ARM64.ActiveCfg = Release|ARM64
+		{D27CF69D-4681-492A-BE4D-D3D209104423}.Release|ARM64.Build.0 = Release|ARM64
 		{327E25D4-D8DF-4704-ABA3-274F8E777847}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{327E25D4-D8DF-4704-ABA3-274F8E777847}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{327E25D4-D8DF-4704-ABA3-274F8E777847}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{327E25D4-D8DF-4704-ABA3-274F8E777847}.Debug|ARM64.Build.0 = Debug|ARM64
 		{327E25D4-D8DF-4704-ABA3-274F8E777847}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{327E25D4-D8DF-4704-ABA3-274F8E777847}.Release|Any CPU.Build.0 = Release|Any CPU
+		{327E25D4-D8DF-4704-ABA3-274F8E777847}.Release|ARM64.ActiveCfg = Release|ARM64
+		{327E25D4-D8DF-4704-ABA3-274F8E777847}.Release|ARM64.Build.0 = Release|ARM64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
