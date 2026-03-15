@@ -1,4 +1,4 @@
-// @file ScintillaEdit.cpp
+// ScintillaEdit.cpp
 // Extended version of ScintillaEditBase with a method for each API
 // Copyright (c) 2011 Archaeopteryx Software, Inc. d/b/a Wingware
 
@@ -13,17 +13,16 @@ ScintillaEdit::~ScintillaEdit() {
 }
 
 QByteArray ScintillaEdit::TextReturner(int message, uptr_t wParam) const {
-    // While Scintilla can return strings longer than maximum(int), QByteArray uses int size
-    const int length = static_cast<int>(send(message, wParam, 0));
-    QByteArray ba(length + 1, '\0');
+    int length = send(message, wParam, 0);
+    QByteArray ba(length, '\0');
     send(message, wParam, (sptr_t)ba.data());
     // Remove extra NULs
-    if (ba.at(ba.size()-1) == 0)
+    if (ba.size() > 0 && ba.at(ba.size()-1) == 0)
         ba.chop(1);
     return ba;
 }
 
-QPair<int, int>ScintillaEdit::find_text(int flags, const char *text, int cpMin, int cpMax) const {
+QPair<int, int>ScintillaEdit::find_text(int flags, const char *text, int cpMin, int cpMax) {
     struct Sci_TextToFind ft = {{0, 0}, 0, {0, 0}};
     ft.chrg.cpMin = cpMin;
     ft.chrg.cpMax = cpMax;
@@ -36,7 +35,7 @@ QPair<int, int>ScintillaEdit::find_text(int flags, const char *text, int cpMin, 
     return QPair<int,int>(start, ft.chrgText.cpMax);
 }
 
-QByteArray ScintillaEdit::get_text_range(int start, int end) const {
+QByteArray ScintillaEdit::get_text_range(int start, int end) {
     if (start > end)
         start = end;
 
@@ -50,7 +49,7 @@ QByteArray ScintillaEdit::get_text_range(int start, int end) const {
     return ba;
 }
 
-ScintillaDocument *ScintillaEdit::get_doc() const {
+ScintillaDocument *ScintillaEdit::get_doc() {
     return new ScintillaDocument(0, (void *)send(SCI_GETDOCPOINTER, 0, 0));
 }
 
@@ -60,7 +59,7 @@ void ScintillaEdit::set_doc(ScintillaDocument *pdoc_) {
 
 long ScintillaEdit::format_range(bool draw, QPaintDevice* target, QPaintDevice* measure,
                                  const QRect& print_rect, const QRect& page_rect,
-                                 long range_start, long range_end) const
+                                 long range_start, long range_end)
 {
     Sci_RangeToFormat to_format;
 

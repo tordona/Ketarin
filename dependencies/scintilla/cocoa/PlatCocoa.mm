@@ -1,6 +1,6 @@
 /**
  * Scintilla source code edit control
- * @file PlatCocoa.mm - implementation of platform facilities on macOS/Cocoa
+ * @file PlatCocoa.mm - implementation of platform facilities on MacOS X/Cocoa
  *
  * Written by Mike Lischke
  * Based on PlatMacOSX.cxx
@@ -23,19 +23,15 @@
 #include <string_view>
 #include <vector>
 #include <map>
-#include <optional>
 #include <functional>
 #include <memory>
 #include <numeric>
 
+#include <dlfcn.h>
+#include <sys/time.h>
+
 #import <Foundation/NSGeometry.h>
 
-#import "ScintillaTypes.h"
-#import "ScintillaMessages.h"
-#import "ScintillaStructures.h"
-
-#import "Debugging.h"
-#import "Geometry.h"
 #import "Platform.h"
 
 #include "XPM.h"
@@ -46,18 +42,8 @@
 #import "PlatCocoa.h"
 
 using namespace Scintilla;
-using namespace Scintilla::Internal;
 
 extern sptr_t scintilla_send_message(void *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam);
-
-//--------------------------------------------------------------------------------------------------
-
-/**
- * Converts a Point as used by Scintilla to a Quartz-style CGPoint.
- */
-inline CGPoint CGPointFromPoint(Scintilla::Internal::Point pt) {
-	return CGPointMake(pt.x, pt.y);
-}
 
 //--------------------------------------------------------------------------------------------------
 
@@ -73,8 +59,10 @@ NSRect PRectangleToNSRect(const PRectangle &rc) {
 /**
  * Converts an NSRect as used by the system to a native Scintilla rectangle.
  */
-PRectangle NSRectToPRectangle(const NSRect &rc) {
-	return PRectangle(rc.origin.x, rc.origin.y, NSMaxX(rc), NSMaxY(rc));
+PRectangle NSRectToPRectangle(NSRect &rc) {
+	return PRectangle(static_cast<XYPOSITION>(rc.origin.x), static_cast<XYPOSITION>(rc.origin.y),
+			  static_cast<XYPOSITION>(NSMaxX(rc)),
+			  static_cast<XYPOSITION>(NSMaxY(rc)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -86,45 +74,27 @@ inline CGRect PRectangleToCGRect(PRectangle &rc) {
 	return CGRectMake(rc.left, rc.top, rc.Width(), rc.Height());
 }
 
-//--------------------------------------------------------------------------------------------------
+//----------------- Font ---------------------------------------------------------------------------
 
-/**
- * Converts a PRectangle as used by Scintilla to a Quartz-style rectangle.
- * Result is inset by strokeWidth / 2 so stroking does not go outside the rectangle.
- */
-inline CGRect CGRectFromPRectangleInset(PRectangle rc, XYPOSITION strokeWidth) {
-	const XYPOSITION halfStroke = strokeWidth / 2.0f;
-	const CGRect rect = PRectangleToCGRect(rc);
-	return CGRectInset(rect, halfStroke, halfStroke);
+Font::Font() noexcept : fid(0) {
 }
 
-//----------------- FontQuartz ---------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
-class FontQuartz : public Font {
-public:
-	std::unique_ptr<QuartzTextStyle> style;
-	FontQuartz(const FontParameters &fp) {
-		style = std::make_unique<QuartzTextStyle>();
-		// Create the font with attributes
-		QuartzFont font(fp.faceName, strlen(fp.faceName), fp.size, fp.weight, fp.stretch, fp.italic);
-		CTFontRef fontRef = font.getFontID();
-		style->setFontRef(fontRef, fp.characterSet);
-	}
-	FontQuartz(const QuartzTextStyle *style_) {
-		style = std::make_unique<QuartzTextStyle>(style_);
-	}
-};
+Font::~Font() {
+	Release();
+}
 
 //--------------------------------------------------------------------------------------------------
 
-static QuartzTextStyle *TextStyleFromFont(const Font *f) noexcept {
-	if (f) {
-		const FontQuartz *pfq = dynamic_cast<const FontQuartz *>(f);
-		if (pfq) {
-			return pfq->style.get();
-		}
-	}
-	return nullptr;
+static QuartzTextStyle *TextStyleFromFont(const Font &f) {
+	return static_cast<QuartzTextStyle *>(f.GetID());
+}
+
+//--------------------------------------------------------------------------------------------------
+
+static int FontCharacterSet(Font &f) {
+	return TextStyleFromFont(f)->getCharacterSet();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -132,8 +102,24 @@ static QuartzTextStyle *TextStyleFromFont(const Font *f) noexcept {
 /**
  * Creates a CTFontRef with the given properties.
  */
-std::shared_ptr<Font> Font::Allocate(const FontParameters &fp) {
-	return std::make_shared<FontQuartz>(fp);
+void Font::Create(const FontParameters &fp) {
+	Release();
+
+	QuartzTextStyle *style = new QuartzTextStyle();
+	fid = style;
+
+	// Create the font with attributes
+	QuartzFont font(fp.faceName, strlen(fp.faceName), fp.size, fp.weight, fp.italic);
+	CTFontRef fontRef = font.getFontID();
+	style->setFontRef(fontRef, fp.characterSet);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void Font::Release() {
+	if (fid)
+		delete static_cast<QuartzTextStyle *>(fid);
+	fid = 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -215,7 +201,7 @@ ScreenLineLayout::ScreenLineLayout(const IScreenLine *screenLine) : text(screenL
 								    byteCount,
 								    kCFStringEncodingUTF8,
 								    false);
-			const QuartzTextStyle *qts = TextStyleFromFont(screenLine->FontOfPosition(bp));
+			QuartzTextStyle *qts = static_cast<QuartzTextStyle *>(screenLine->FontOfPosition(bp)->GetID());
 			CFMutableDictionaryRef pieceAttributes = qts->getCTStyle();
 			as = CFAttributedStringCreate(NULL, piece, pieceAttributes);
 			CFRelease(piece);
@@ -340,21 +326,19 @@ void GetPositions(CTLineRef line, std::vector<CGFloat> &positions) {
 			 positions.begin(), std::plus<CGFloat>());
 }
 
-const Supports SupportsCocoa[] = {
-	Supports::LineDrawsFinal,
-	Supports::PixelDivisions,
-	Supports::FractionalStrokeWidth,
-	Supports::TranslucentStroke,
-	Supports::PixelModification,
-	Supports::ThreadSafeMeasureWidths,
-};
-
 }
 
 //----------------- SurfaceImpl --------------------------------------------------------------------
 
 SurfaceImpl::SurfaceImpl() {
+	unicodeMode = true;
+	x = 0;
+	y = 0;
 	gc = NULL;
+
+	textLayout.reset(new QuartzTextLayout());
+	codePage = 0;
+	verticalDeviceResolution = 0;
 
 	bitmapData.reset(); // Release will try and delete bitmapData if != nullptr
 	bitmapWidth = 0;
@@ -363,7 +347,66 @@ SurfaceImpl::SurfaceImpl() {
 	Release();
 }
 
-SurfaceImpl::SurfaceImpl(const SurfaceImpl *surface, int width, int height) {
+//--------------------------------------------------------------------------------------------------
+
+SurfaceImpl::~SurfaceImpl() {
+	Clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void SurfaceImpl::Clear() {
+	if (bitmapData) {
+		bitmapData.reset();
+		// We only "own" the graphics context if we are a bitmap context
+		if (gc)
+			CGContextRelease(gc);
+	}
+	gc = NULL;
+
+	bitmapWidth = 0;
+	bitmapHeight = 0;
+	x = 0;
+	y = 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void SurfaceImpl::Release() {
+	Clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+bool SurfaceImpl::Initialised() {
+	// We are initalised if the graphics context is not null
+	return gc != NULL;// || port != NULL;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void SurfaceImpl::Init(WindowID) {
+	// To be able to draw, the surface must get a CGContext handle.  We save the graphics port,
+	// then acquire/release the context on an as-need basis (see above).
+	// XXX Docs on QDBeginCGContext are light, a better way to do this would be good.
+	// AFAIK we should not hold onto a context retrieved this way, thus the need for
+	// acquire/release of the context.
+
+	Release();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void SurfaceImpl::Init(SurfaceID sid, WindowID) {
+	Release();
+	gc = static_cast<CGContextRef>(sid);
+	CGContextSetLineWidth(gc, 1.0);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+void SurfaceImpl::InitPixMap(int width, int height, Surface *surface_, WindowID /* wid */) {
+	Release();
 
 	// Create a new bitmap context, along with the RAM for the bitmap itself
 	bitmapWidth = width;
@@ -404,121 +447,38 @@ SurfaceImpl::SurfaceImpl(const SurfaceImpl *surface, int width, int height) {
 		CGContextFillRect(gc, CGRectMake(0, 0, width, height));
 	}
 
-	mode = surface->mode;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-SurfaceImpl::~SurfaceImpl() {
-	Clear();
-}
-
-//--------------------------------------------------------------------------------------------------
-
-bool SurfaceImpl::UnicodeMode() const noexcept {
-	return mode.codePage == SC_CP_UTF8;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::Clear() {
-	if (bitmapData) {
-		bitmapData.reset();
-		// We only "own" the graphics context if we are a bitmap context
-		if (gc)
-			CGContextRelease(gc);
+	if (surface_) {
+		SurfaceImpl *psurfOther = static_cast<SurfaceImpl *>(surface_);
+		unicodeMode = psurfOther->unicodeMode;
+		codePage = psurfOther->codePage;
+	} else {
+		unicodeMode = true;
+		codePage = SC_CP_UTF8;
 	}
-	gc = NULL;
-
-	bitmapWidth = 0;
-	bitmapHeight = 0;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void SurfaceImpl::Release() noexcept {
-	Clear();
-}
+void SurfaceImpl::PenColour(ColourDesired fore) {
+	if (gc) {
+		ColourDesired colour(fore.AsInteger());
 
-//--------------------------------------------------------------------------------------------------
-
-bool SurfaceImpl::Initialised() {
-	// We are initalised if the graphics context is not null
-	return gc != NULL;// || port != NULL;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::Init(WindowID) {
-	// To be able to draw, the surface must get a CGContext handle.  We save the graphics port,
-	// then acquire/release the context on an as-need basis (see above).
-	// XXX Docs on QDBeginCGContext are light, a better way to do this would be good.
-	// AFAIK we should not hold onto a context retrieved this way, thus the need for
-	// acquire/release of the context.
-
-	Release();
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::Init(SurfaceID sid, WindowID) {
-	Release();
-	gc = static_cast<CGContextRef>(sid);
-	CGContextSetLineWidth(gc, 1.0);
-}
-
-std::unique_ptr<Surface> SurfaceImpl::AllocatePixMap(int width, int height) {
-	return std::make_unique<SurfaceImpl>(this, width, height);
-}
-
-std::unique_ptr<SurfaceImpl> SurfaceImpl::AllocatePixMapImplementation(int width, int height) {
-	return std::make_unique<SurfaceImpl>(this, width, height);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::SetMode(SurfaceMode mode_) {
-	mode = mode_;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-int SurfaceImpl::SupportsFeature(Supports feature) noexcept {
-	for (const Supports f : SupportsCocoa) {
-		if (f == feature)
-			return 1;
+		// Set the Stroke color to match
+		CGContextSetRGBStrokeColor(gc, colour.GetRed() / 255.0, colour.GetGreen() / 255.0,
+					   colour.GetBlue() / 255.0, 1.0);
 	}
-	return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void SurfaceImpl::FillColour(ColourRGBA fill) {
-	// Set the Fill color to match
-	CGContextSetRGBFillColor(gc,
-				 fill.GetRedComponent(),
-				 fill.GetGreenComponent(),
-				 fill.GetBlueComponent(),
-				 fill.GetAlphaComponent());
-}
+void SurfaceImpl::FillColour(const ColourDesired &back) {
+	if (gc) {
+		ColourDesired colour(back.AsInteger());
 
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::PenColourAlpha(ColourRGBA fore) {
-	// Set the Stroke color to match
-	CGContextSetRGBStrokeColor(gc,
-				   fore.GetRedComponent(),
-				   fore.GetGreenComponent(),
-				   fore.GetBlueComponent(),
-				   fore.GetAlphaComponent());
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::SetFillStroke(FillStroke fillStroke) {
-	FillColour(fillStroke.fill.colour);
-	PenColourAlpha(fillStroke.stroke.colour);
-	CGContextSetLineWidth(gc, fillStroke.stroke.width);
+		// Set the Fill color to match
+		CGContextSetRGBFillColor(gc, colour.GetRed() / 255.0, colour.GetGreen() / 255.0,
+					 colour.GetBlue() / 255.0, 1.0);
+	}
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -589,22 +549,6 @@ int SurfaceImpl::LogPixelsY() {
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns the number of device pixels per logical pixel.
- * 1 for older displays and 2 for retina displays. Potentially 3 for some phones.
- */
-int SurfaceImpl::PixelDivisions() {
-	if (gc) {
-		const CGSize szDevice = CGContextConvertSizeToDeviceSpace(gc, CGSizeMake(1.0, 1.0));
-		const int devicePixels = std::round(szDevice.width);
-		assert(devicePixels == 1 || devicePixels == 2);
-		return devicePixels;
-	}
-	return 1;
-}
-
-//--------------------------------------------------------------------------------------------------
-
-/**
  * Converts the logical font height in points into a device height.
  * For Cocoa, points are always used for the result even on retina displays.
  */
@@ -614,46 +558,46 @@ int SurfaceImpl::DeviceHeightFont(int points) {
 
 //--------------------------------------------------------------------------------------------------
 
-void SurfaceImpl::LineDraw(Point start, Point end, Stroke stroke) {
-	PenColourAlpha(stroke.colour);
-	CGContextSetLineWidth(gc, stroke.width);
-
-	CGContextBeginPath(gc);
-	CGContextMoveToPoint(gc, start.x, start.y);
-	CGContextAddLineToPoint(gc, end.x, end.y);
-	CGContextStrokePath(gc);
-
-	CGContextSetLineWidth(gc, 1.0f);
+void SurfaceImpl::MoveTo(int x_, int y_) {
+	x = x_;
+	y = y_;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void SurfaceImpl::PolyLine(const Point *pts, size_t npts, Stroke stroke) {
-	PLATFORM_ASSERT(gc && (npts > 1));
-	if (!gc || (npts <= 1)) {
-		return;
-	}
-	PenColourAlpha(stroke.colour);
-	CGContextSetLineWidth(gc, stroke.width);
+void SurfaceImpl::LineTo(int x_, int y_) {
 	CGContextBeginPath(gc);
-	CGContextMoveToPoint(gc, pts[0].x, pts[0].y);
-	for (size_t i = 1; i < npts; i++) {
-		CGContextAddLineToPoint(gc, pts[i].x, pts[i].y);
-	}
-	CGContextStrokePath(gc);
 
-	CGContextSetLineWidth(gc, 1.0f);
+	// Because Quartz is based on floating point, lines are drawn with half their colour
+	// on each side of the line. Integer coordinates specify the INTERSECTION of the pixel
+	// division lines. If you specify exact pixel values, you get a line that
+	// is twice as thick but half as intense. To get pixel aligned rendering,
+	// we render the "middle" of the pixels by adding 0.5 to the coordinates.
+	CGContextMoveToPoint(gc, x + 0.5, y + 0.5);
+	CGContextAddLineToPoint(gc, x_ + 0.5, y_ + 0.5);
+	CGContextStrokePath(gc);
+	x = x_;
+	y = y_;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void SurfaceImpl::Polygon(const Scintilla::Internal::Point *pts, size_t npts, FillStroke fillStroke) {
-	std::vector<CGPoint> points;
-	std::transform(pts, pts + npts, std::back_inserter(points), CGPointFromPoint);
+void SurfaceImpl::Polygon(Scintilla::Point *pts, size_t npts, ColourDesired fore,
+			  ColourDesired back) {
+	// Allocate memory for the array of points.
+	std::vector<CGPoint> points(npts);
+
+	for (size_t i = 0; i < npts; i++) {
+		// Quartz floating point issues: plot the MIDDLE of the pixels
+		points[i].x = pts[i].x + 0.5;
+		points[i].y = pts[i].y + 0.5;
+	}
 
 	CGContextBeginPath(gc);
 
-	SetFillStroke(fillStroke);
+	// Set colours
+	FillColour(back);
+	PenColour(fore);
 
 	// Draw the polygon
 	CGContextAddLines(gc, points.data(), npts);
@@ -661,59 +605,35 @@ void SurfaceImpl::Polygon(const Scintilla::Internal::Point *pts, size_t npts, Fi
 	// Explicitly close the path, so it is closed for stroking AND filling (implicit close = filling only)
 	CGContextClosePath(gc);
 	CGContextDrawPath(gc, kCGPathFillStroke);
-
-	// Restore as not all paths set
-	CGContextSetLineWidth(gc, 1.0f);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void SurfaceImpl::RectangleDraw(PRectangle rc, FillStroke fillStroke) {
-	if (!gc)
-		return;
-	CGContextBeginPath(gc);
-	SetFillStroke(fillStroke);
-
-	CGContextAddRect(gc, CGRectFromPRectangleInset(rc, fillStroke.stroke.width));
-
-	CGContextDrawPath(gc, kCGPathFillStroke);
-
-	// Restore as not all paths set
-	CGContextSetLineWidth(gc, 1.0f);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::RectangleFrame(PRectangle rc, Stroke stroke) {
-	if (!gc)
-		return;
-
-	CGContextBeginPath(gc);
-	PenColourAlpha(stroke.colour);
-	CGContextSetLineWidth(gc, stroke.width);
-
-	CGContextAddRect(gc, CGRectFromPRectangleInset(rc, stroke.width));
-
-	CGContextDrawPath(gc, kCGPathStroke);
-
-	// Restore as not all paths set
-	CGContextSetLineWidth(gc, 1.0f);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::FillRectangle(PRectangle rc, Fill fill) {
+void SurfaceImpl::RectangleDraw(PRectangle rc, ColourDesired fore, ColourDesired back) {
 	if (gc) {
-		FillColour(fill.colour);
-		CGRect rect = PRectangleToCGRect(rc);
-		CGContextFillRect(gc, rect);
+		CGContextBeginPath(gc);
+		FillColour(back);
+		PenColour(fore);
+
+		// Quartz integer -> float point conversion fun (see comment in SurfaceImpl::LineTo)
+		// We subtract 1 from the Width() and Height() so that all our drawing is within the area defined
+		// by the PRectangle. Otherwise, we draw one pixel too far to the right and bottom.
+		CGContextAddRect(gc, CGRectMake(rc.left + 0.5, rc.top + 0.5, rc.Width() - 1, rc.Height() - 1));
+		CGContextDrawPath(gc, kCGPathFillStroke);
 	}
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void SurfaceImpl::FillRectangleAligned(PRectangle rc, Fill fill) {
-	FillRectangle(PixelAlign(rc, PixelDivisions()), fill);
+void SurfaceImpl::FillRectangle(PRectangle rc, ColourDesired back) {
+	if (gc) {
+		FillColour(back);
+		// Snap rectangle boundaries to nearest int
+		rc.left = std::round(rc.left);
+		rc.right = std::round(rc.right);
+		CGRect rect = PRectangleToCGRect(rc);
+		CGContextFillRect(gc, rect);
+	}
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -737,7 +657,7 @@ void SurfaceImpl::FillRectangle(PRectangle rc, Surface &surfacePattern) {
 	// For now, assume that copy can only be called on PixMap surfaces. Shows up black.
 	CGImageRef image = patternSurface.CreateImage();
 	if (image == NULL) {
-		FillRectangle(rc, ColourRGBA::FromRGB(0));
+		FillRectangle(rc, ColourDesired(0));
 		return;
 	}
 
@@ -775,8 +695,8 @@ void SurfaceImpl::FillRectangle(PRectangle rc, Surface &surfacePattern) {
 	} /* pattern != NULL */
 }
 
-void SurfaceImpl::RoundedRectangle(PRectangle rc, FillStroke fillStroke) {
-	// This is only called from the margin marker drawing code for MarkerSymbol::RoundRect
+void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourDesired fore, ColourDesired back) {
+	// This is only called from the margin marker drawing code for SC_MARK_ROUNDRECT
 	// The Win32 version does
 	//  ::RoundRect(hdc, rc.left + 1, rc.top, rc.right - 1, rc.bottom, 8, 8 );
 	// which is a rectangle with rounded corners each having a radius of 4 pixels.
@@ -820,7 +740,8 @@ void SurfaceImpl::RoundedRectangle(PRectangle rc, FillStroke fillStroke) {
 		}
 	}
 
-	SetFillStroke(fillStroke);
+	PenColour(fore);
+	FillColour(back);
 
 	// Move to the last point to begin the path
 	CGContextBeginPath(gc);
@@ -834,9 +755,6 @@ void SurfaceImpl::RoundedRectangle(PRectangle rc, FillStroke fillStroke) {
 	// Close the path to enclose it for stroking and for filling, then draw it
 	CGContextClosePath(gc);
 	CGContextDrawPath(gc, kCGPathFillStroke);
-
-	// Restore as not all paths set
-	CGContextSetLineWidth(gc, 1.0f);
 }
 
 // DrawChamferedRectangle is a helper function for AlphaRectangle that either fills or strokes a
@@ -884,56 +802,55 @@ static void DrawChamferedRectangle(CGContextRef gc, PRectangle rc, int cornerSiz
 	CGContextDrawPath(gc, mode);
 }
 
-void Scintilla::Internal::SurfaceImpl::AlphaRectangle(PRectangle rc, XYPOSITION cornerSize, FillStroke fillStroke) {
+void Scintilla::SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize, ColourDesired fill, int alphaFill,
+		ColourDesired outline, int alphaOutline, int /*flags*/) {
 	if (gc) {
-		const XYPOSITION halfStroke = fillStroke.stroke.width / 2.0f;
+		// Snap rectangle boundaries to nearest int
+		rc.left = std::round(rc.left);
+		rc.right = std::round(rc.right);
 		// Set the Fill color to match
-		FillColour(fillStroke.fill.colour);
-		PenColourAlpha(fillStroke.stroke.colour);
+		CGContextSetRGBFillColor(gc, fill.GetRed() / 255.0, fill.GetGreen() / 255.0, fill.GetBlue() / 255.0, alphaFill / 255.0);
+		CGContextSetRGBStrokeColor(gc, outline.GetRed() / 255.0, outline.GetGreen() / 255.0, outline.GetBlue() / 255.0, alphaOutline / 255.0);
 		PRectangle rcFill = rc;
 		if (cornerSize == 0) {
 			// A simple rectangle, no rounded corners
-			if (fillStroke.fill.colour == fillStroke.stroke.colour) {
+			if ((fill == outline) && (alphaFill == alphaOutline)) {
 				// Optimization for simple case
 				CGRect rect = PRectangleToCGRect(rcFill);
 				CGContextFillRect(gc, rect);
 			} else {
-				rcFill.left += fillStroke.stroke.width;
-				rcFill.top += fillStroke.stroke.width;
-				rcFill.right -= fillStroke.stroke.width;
-				rcFill.bottom -= fillStroke.stroke.width;
+				rcFill.left += 1.0;
+				rcFill.top += 1.0;
+				rcFill.right -= 1.0;
+				rcFill.bottom -= 1.0;
 				CGRect rect = PRectangleToCGRect(rcFill);
 				CGContextFillRect(gc, rect);
-				CGContextAddRect(gc, CGRectMake(rc.left + halfStroke, rc.top + halfStroke,
-								rc.Width() - fillStroke.stroke.width, rc.Height() - fillStroke.stroke.width));
-				CGContextStrokeRectWithWidth(gc,
-							     CGRectMake(rc.left + halfStroke, rc.top + halfStroke,
-									rc.Width() - fillStroke.stroke.width, rc.Height() - fillStroke.stroke.width),
-							     fillStroke.stroke.width);
+				CGContextAddRect(gc, CGRectMake(rc.left + 0.5, rc.top + 0.5, rc.Width() - 1, rc.Height() - 1));
+				CGContextStrokePath(gc);
 			}
 		} else {
 			// Approximate rounded corners with 45 degree chamfers.
 			// Drawing real circular arcs often leaves some over- or under-drawn pixels.
-			if (fillStroke.fill.colour == fillStroke.stroke.colour) {
+			if ((fill == outline) && (alphaFill == alphaOutline)) {
 				// Specializing this case avoids a few stray light/dark pixels in corners.
-				rcFill.left -= halfStroke;
-				rcFill.top -= halfStroke;
-				rcFill.right += halfStroke;
-				rcFill.bottom += halfStroke;
+				rcFill.left -= 0.5;
+				rcFill.top -= 0.5;
+				rcFill.right += 0.5;
+				rcFill.bottom += 0.5;
 				DrawChamferedRectangle(gc, rcFill, cornerSize, kCGPathFill);
 			} else {
-				rcFill.left += halfStroke;
-				rcFill.top += halfStroke;
-				rcFill.right -= halfStroke;
-				rcFill.bottom -= halfStroke;
-				DrawChamferedRectangle(gc, rcFill, cornerSize-fillStroke.stroke.width, kCGPathFill);
+				rcFill.left += 0.5;
+				rcFill.top += 0.5;
+				rcFill.right -= 0.5;
+				rcFill.bottom -= 0.5;
+				DrawChamferedRectangle(gc, rcFill, cornerSize-1, kCGPathFill);
 				DrawChamferedRectangle(gc, rc, cornerSize, kCGPathStroke);
 			}
 		}
 	}
 }
 
-void Scintilla::Internal::SurfaceImpl::GradientRectangle(PRectangle rc, const std::vector<ColourStop> &stops, GradientOptions options) {
+void Scintilla::SurfaceImpl::GradientRectangle(PRectangle rc, const std::vector<ColourStop> &stops, GradientOptions options) {
 	if (!gc) {
 		return;
 	}
@@ -1042,73 +959,18 @@ void SurfaceImpl::DrawRGBAImage(PRectangle rc, int width, int height, const unsi
 	}
 }
 
-void SurfaceImpl::Ellipse(PRectangle rc, FillStroke fillStroke) {
-	const CGRect ellipseRect = CGRectFromPRectangleInset(rc, fillStroke.stroke.width / 2.0f);
-	SetFillStroke(fillStroke);
+void SurfaceImpl::Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back) {
+	CGRect ellipseRect = CGRectMake(rc.left, rc.top, rc.Width(), rc.Height());
+	FillColour(back);
+	PenColour(fore);
 	CGContextBeginPath(gc);
 	CGContextAddEllipseInRect(gc, ellipseRect);
 	CGContextDrawPath(gc, kCGPathFillStroke);
-	// Restore as not all paths set
-	CGContextSetLineWidth(gc, 1.0f);
 }
 
-void SurfaceImpl::Stadium(PRectangle rc, FillStroke fillStroke, Ends ends) {
-	const CGFloat midLine = rc.Centre().y;
-	const CGFloat piOn2 = acos(0.0);
-	const XYPOSITION halfStroke = fillStroke.stroke.width / 2.0f;
-	const float radius = rc.Height() / 2.0f - halfStroke;
-	PRectangle rcInner = rc;
-	rcInner.left += radius;
-	rcInner.right -= radius;
-
-	SetFillStroke(fillStroke);
-	CGContextBeginPath(gc);
-
-	const Ends leftSide = static_cast<Ends>(static_cast<int>(ends) & 0xf);
-	const Ends rightSide = static_cast<Ends>(static_cast<int>(ends) & 0xf0);
-	switch (leftSide) {
-		case Ends::leftFlat:
-			CGContextMoveToPoint(gc, rc.left + halfStroke, rc.top + halfStroke);
-			CGContextAddLineToPoint(gc, rc.left + halfStroke, rc.bottom - halfStroke);
-			break;
-		case Ends::leftAngle:
-			CGContextMoveToPoint(gc, rcInner.left + halfStroke, rc.top + halfStroke);
-			CGContextAddLineToPoint(gc, rc.left + halfStroke, rc.Centre().y);
-			CGContextAddLineToPoint(gc, rcInner.left + halfStroke, rc.bottom - halfStroke);
-			break;
-		case Ends::semiCircles:
-		default:
-			CGContextMoveToPoint(gc, rcInner.left + halfStroke, rc.top + halfStroke);
-			CGContextAddArc(gc, rcInner.left + halfStroke, midLine, radius, -piOn2, piOn2, 1);
-			break;
-	}
-
-	switch (rightSide) {
-		case Ends::rightFlat:
-			CGContextAddLineToPoint(gc, rc.right - halfStroke, rc.bottom - halfStroke);
-			CGContextAddLineToPoint(gc, rc.right - halfStroke, rc.top + halfStroke);
-			break;
-		case Ends::rightAngle:
-			CGContextAddLineToPoint(gc, rcInner.right - halfStroke, rc.bottom - halfStroke);
-			CGContextAddLineToPoint(gc, rc.right - halfStroke, rc.Centre().y);
-			CGContextAddLineToPoint(gc, rcInner.right - halfStroke, rc.top + halfStroke);
-			break;
-		case Ends::semiCircles:
-		default:
-			CGContextAddLineToPoint(gc, rcInner.right - halfStroke, rc.bottom - halfStroke);
-			CGContextAddArc(gc, rcInner.right - halfStroke, midLine, radius, piOn2, -piOn2, 1);
-			break;
-	}
-
-	// Close the path to enclose it for stroking and for filling, then draw it
-	CGContextClosePath(gc);
-	CGContextDrawPath(gc, kCGPathFillStroke);
-
-	CGContextSetLineWidth(gc, 1.0f);
-}
-
-void SurfaceImpl::CopyImageRectangle(SurfaceImpl *source, PRectangle srcRect, PRectangle dstRect) {
-	CGImageRef image = source->CreateImage();
+void SurfaceImpl::CopyImageRectangle(Surface &surfaceSource, PRectangle srcRect, PRectangle dstRect) {
+	SurfaceImpl &source = static_cast<SurfaceImpl &>(surfaceSource);
+	CGImageRef image = source.CreateImage();
 
 	CGRect src = PRectangleToCGRect(srcRect);
 	CGRect dst = PRectangleToCGRect(dstRect);
@@ -1131,7 +993,7 @@ void SurfaceImpl::CopyImageRectangle(SurfaceImpl *source, PRectangle srcRect, PR
 	CGImageRelease(image);
 }
 
-void SurfaceImpl::Copy(PRectangle rc, Scintilla::Internal::Point from, Surface &surfaceSource) {
+void SurfaceImpl::Copy(PRectangle rc, Scintilla::Point from, Surface &surfaceSource) {
 	// Maybe we have to make the Surface two contexts:
 	// a bitmap context which we do all the drawing on, and then a "real" context
 	// which we copy the output to when we call "Synchronize". Ugh! Gross and slow!
@@ -1143,7 +1005,7 @@ void SurfaceImpl::Copy(PRectangle rc, Scintilla::Internal::Point from, Surface &
 	CGImageRef image = source.CreateImage();
 	// If we could not get an image reference, fill the rectangle black
 	if (image == NULL) {
-		FillRectangle(rc, ColourRGBA::FromRGB(0));
+		FillRectangle(rc, ColourDesired(0));
 		return;
 	}
 
@@ -1174,16 +1036,16 @@ std::unique_ptr<IScreenLineLayout> SurfaceImpl::Layout(const IScreenLine *screen
 
 //--------------------------------------------------------------------------------------------------
 
-void SurfaceImpl::DrawTextNoClip(PRectangle rc, const Font *font_, XYPOSITION ybase, std::string_view text,
-				 ColourRGBA fore, ColourRGBA back) {
-	FillRectangleAligned(rc, back);
+void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase, std::string_view text,
+				 ColourDesired fore, ColourDesired back) {
+	FillRectangle(rc, back);
 	DrawTextTransparent(rc, font_, ybase, text, fore);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void SurfaceImpl::DrawTextClipped(PRectangle rc, const Font *font_, XYPOSITION ybase, std::string_view text,
-				  ColourRGBA fore, ColourRGBA back) {
+void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase, std::string_view text,
+				  ColourDesired fore, ColourDesired back) {
 	CGContextSaveGState(gc);
 	CGContextClipToRect(gc, PRectangleToCGRect(rc));
 	DrawTextNoClip(rc, font_, ybase, text, fore, back);
@@ -1192,7 +1054,7 @@ void SurfaceImpl::DrawTextClipped(PRectangle rc, const Font *font_, XYPOSITION y
 
 //--------------------------------------------------------------------------------------------------
 
-CFStringEncoding EncodingFromCharacterSet(bool unicode, CharacterSet characterSet) {
+CFStringEncoding EncodingFromCharacterSet(bool unicode, int characterSet) {
 	if (unicode)
 		return kCFStringEncodingUTF8;
 
@@ -1200,100 +1062,90 @@ CFStringEncoding EncodingFromCharacterSet(bool unicode, CharacterSet characterSe
 	enum { notSupported = kCFStringEncodingISOLatin1};
 
 	switch (characterSet) {
-	case CharacterSet::Ansi:
+	case SC_CHARSET_ANSI:
 		return kCFStringEncodingISOLatin1;
-	case CharacterSet::Default:
+	case SC_CHARSET_DEFAULT:
 		return kCFStringEncodingISOLatin1;
-	case CharacterSet::Baltic:
+	case SC_CHARSET_BALTIC:
 		return kCFStringEncodingWindowsBalticRim;
-	case CharacterSet::ChineseBig5:
+	case SC_CHARSET_CHINESEBIG5:
 		return kCFStringEncodingBig5;
-	case CharacterSet::EastEurope:
+	case SC_CHARSET_EASTEUROPE:
 		return kCFStringEncodingWindowsLatin2;
-	case CharacterSet::GB2312:
+	case SC_CHARSET_GB2312:
 		return kCFStringEncodingGB_18030_2000;
-	case CharacterSet::Greek:
+	case SC_CHARSET_GREEK:
 		return kCFStringEncodingWindowsGreek;
-	case CharacterSet::Hangul:
+	case SC_CHARSET_HANGUL:
 		return kCFStringEncodingEUC_KR;
-	case CharacterSet::Mac:
+	case SC_CHARSET_MAC:
 		return kCFStringEncodingMacRoman;
-	case CharacterSet::Oem:
+	case SC_CHARSET_OEM:
 		return kCFStringEncodingISOLatin1;
-	case CharacterSet::Russian:
+	case SC_CHARSET_RUSSIAN:
 		return kCFStringEncodingKOI8_R;
-	case CharacterSet::Cyrillic:
+	case SC_CHARSET_CYRILLIC:
 		return kCFStringEncodingWindowsCyrillic;
-	case CharacterSet::ShiftJis:
+	case SC_CHARSET_SHIFTJIS:
 		return kCFStringEncodingShiftJIS;
-	case CharacterSet::Symbol:
+	case SC_CHARSET_SYMBOL:
 		return kCFStringEncodingMacSymbol;
-	case CharacterSet::Turkish:
+	case SC_CHARSET_TURKISH:
 		return kCFStringEncodingWindowsLatin5;
-	case CharacterSet::Johab:
+	case SC_CHARSET_JOHAB:
 		return kCFStringEncodingWindowsKoreanJohab;
-	case CharacterSet::Hebrew:
+	case SC_CHARSET_HEBREW:
 		return kCFStringEncodingWindowsHebrew;
-	case CharacterSet::Arabic:
+	case SC_CHARSET_ARABIC:
 		return kCFStringEncodingWindowsArabic;
-	case CharacterSet::Vietnamese:
+	case SC_CHARSET_VIETNAMESE:
 		return kCFStringEncodingWindowsVietnamese;
-	case CharacterSet::Thai:
+	case SC_CHARSET_THAI:
 		return kCFStringEncodingISOLatinThai;
-	case CharacterSet::Iso8859_15:
+	case SC_CHARSET_8859_15:
 		return kCFStringEncodingISOLatin1;
 	default:
 		return notSupported;
 	}
 }
 
-void SurfaceImpl::DrawTextTransparent(PRectangle rc, const Font *font_, XYPOSITION ybase, std::string_view text,
-				      ColourRGBA fore) {
+void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font_, XYPOSITION ybase, std::string_view text,
+				      ColourDesired fore) {
+	CFStringEncoding encoding = EncodingFromCharacterSet(unicodeMode, FontCharacterSet(font_));
+	ColourDesired colour(fore.AsInteger());
+	CGColorRef color = CGColorCreateGenericRGB(colour.GetRed()/255.0, colour.GetGreen()/255.0, colour.GetBlue()/255.0, 1.0);
+
 	QuartzTextStyle *style = TextStyleFromFont(font_);
-	if (!style) {
-		return;
-	}
-	CFStringEncoding encoding = EncodingFromCharacterSet(UnicodeMode(), style->getCharacterSet());
-
-	CGColorRef color = CGColorCreateGenericRGB(fore.GetRedComponent(),
-						   fore.GetGreenComponent(),
-						   fore.GetBlueComponent(),
-						   fore.GetAlphaComponent());
-
 	style->setCTStyleColour(color);
 
 	CGColorRelease(color);
 
-	QuartzTextLayout layoutDraw(text, encoding, style);
-	layoutDraw.draw(gc, rc.left, ybase);
+	textLayout->setText(text, encoding, *style);
+	textLayout->draw(gc, rc.left, ybase);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void SurfaceImpl::MeasureWidths(const Font *font_, std::string_view text, XYPOSITION *positions) {
-	const QuartzTextStyle *style = TextStyleFromFont(font_);
-	if (!style) {
-		return;
-	}
-	CFStringEncoding encoding = EncodingFromCharacterSet(UnicodeMode(), style->getCharacterSet());
-	QuartzTextLayout layoutMeasure(text, encoding, style);
-	const CFStringEncoding encodingUsed = layoutMeasure.getEncoding();
+void SurfaceImpl::MeasureWidths(Font &font_, std::string_view text, XYPOSITION *positions) {
+	CFStringEncoding encoding = EncodingFromCharacterSet(unicodeMode, FontCharacterSet(font_));
+	const CFStringEncoding encodingUsed =
+		textLayout->setText(text, encoding, *TextStyleFromFont(font_));
 
-	CTLineRef mLine = layoutMeasure.getCTLine();
+	CTLineRef mLine = textLayout->getCTLine();
 	assert(mLine);
 
 	if (encodingUsed != encoding) {
 		// Switched to MacRoman to make work so treat as single byte encoding.
 		for (int i=0; i<text.length(); i++) {
 			CGFloat xPosition = CTLineGetOffsetForStringIndex(mLine, i+1, nullptr);
-			positions[i] = xPosition;
+			positions[i] = static_cast<XYPOSITION>(xPosition);
 		}
 		return;
 	}
 
-	if (UnicodeMode()) {
+	if (unicodeMode) {
 		// Map the widths given for UTF-16 characters back onto the UTF-8 input string
-		CFIndex fit = layoutMeasure.getStringLength();
+		CFIndex fit = textLayout->getStringLength();
 		int ui=0;
 		int i=0;
 		std::vector<CGFloat> linePositions(fit);
@@ -1304,7 +1156,7 @@ void SurfaceImpl::MeasureWidths(const Font *font_, std::string_view text, XYPOSI
 			const int codeUnits = UTF16LengthFromUTF8ByteCount(byteCount);
 			const CGFloat xPosition = linePositions[ui];
 			for (unsigned int bytePos=0; (bytePos<byteCount) && (i<text.length()); bytePos++) {
-				positions[i++] = xPosition;
+				positions[i++] = static_cast<XYPOSITION>(xPosition);
 			}
 			ui += codeUnits;
 		}
@@ -1314,172 +1166,70 @@ void SurfaceImpl::MeasureWidths(const Font *font_, std::string_view text, XYPOSI
 		while (i<text.length()) {
 			positions[i++] = lastPos;
 		}
-	} else if (mode.codePage) {
+	} else if (codePage) {
 		int ui = 0;
 		for (int i=0; i<text.length();) {
-			size_t lenChar = DBCSIsLeadByte(mode.codePage, text[i]) ? 2 : 1;
+			size_t lenChar = DBCSIsLeadByte(codePage, text[i]) ? 2 : 1;
 			CGFloat xPosition = CTLineGetOffsetForStringIndex(mLine, ui+1, NULL);
 			for (unsigned int bytePos=0; (bytePos<lenChar) && (i<text.length()); bytePos++) {
-				positions[i++] = xPosition;
+				positions[i++] = static_cast<XYPOSITION>(xPosition);
 			}
 			ui++;
 		}
 	} else {	// Single byte encoding
 		for (int i=0; i<text.length(); i++) {
 			CGFloat xPosition = CTLineGetOffsetForStringIndex(mLine, i+1, NULL);
-			positions[i] = xPosition;
+			positions[i] = static_cast<XYPOSITION>(xPosition);
 		}
 	}
 
 }
 
-XYPOSITION SurfaceImpl::WidthText(const Font *font_, std::string_view text) {
-	const QuartzTextStyle *style = TextStyleFromFont(font_);
-	if (!style) {
-		return 1;
-	}
-	CFStringEncoding encoding = EncodingFromCharacterSet(UnicodeMode(), style->getCharacterSet());
-	QuartzTextLayout layoutMeasure(text, encoding, style);
+XYPOSITION SurfaceImpl::WidthText(Font &font_, std::string_view text) {
+	if (font_.GetID()) {
+		CFStringEncoding encoding = EncodingFromCharacterSet(unicodeMode, FontCharacterSet(font_));
+		textLayout->setText(text, encoding, *TextStyleFromFont(font_));
 
-	return static_cast<XYPOSITION>(layoutMeasure.MeasureStringWidth());
+		return static_cast<XYPOSITION>(textLayout->MeasureStringWidth());
+	}
+	return 1;
 }
-
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::DrawTextNoClipUTF8(PRectangle rc, const Font *font_, XYPOSITION ybase, std::string_view text,
-				 ColourRGBA fore, ColourRGBA back) {
-	FillRectangleAligned(rc, back);
-	DrawTextTransparentUTF8(rc, font_, ybase, text, fore);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::DrawTextClippedUTF8(PRectangle rc, const Font *font_, XYPOSITION ybase, std::string_view text,
-				  ColourRGBA fore, ColourRGBA back) {
-	CGContextSaveGState(gc);
-	CGContextClipToRect(gc, PRectangleToCGRect(rc));
-	DrawTextNoClipUTF8(rc, font_, ybase, text, fore, back);
-	CGContextRestoreGState(gc);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::DrawTextTransparentUTF8(PRectangle rc, const Font *font_, XYPOSITION ybase, std::string_view text,
-				      ColourRGBA fore) {
-	QuartzTextStyle *style = TextStyleFromFont(font_);
-	if (!style) {
-		return;
-	}
-	const CFStringEncoding encoding = kCFStringEncodingUTF8;
-
-	CGColorRef color = CGColorCreateGenericRGB(fore.GetRedComponent(),
-						   fore.GetGreenComponent(),
-						   fore.GetBlueComponent(),
-						   fore.GetAlphaComponent());
-
-	style->setCTStyleColour(color);
-
-	CGColorRelease(color);
-
-	QuartzTextLayout layoutDraw(text, encoding, style);
-	layoutDraw.draw(gc, rc.left, ybase);
-}
-
-//--------------------------------------------------------------------------------------------------
-
-void SurfaceImpl::MeasureWidthsUTF8(const Font *font_, std::string_view text, XYPOSITION *positions) {
-	const QuartzTextStyle *style = TextStyleFromFont(font_);
-	if (!style) {
-		return;
-	}
-	constexpr CFStringEncoding encoding = kCFStringEncodingUTF8;
-	QuartzTextLayout layoutMeasure(text, encoding, style);
-	const CFStringEncoding encodingUsed = layoutMeasure.getEncoding();
-
-	CTLineRef mLine = layoutMeasure.getCTLine();
-	assert(mLine);
-
-	if (encodingUsed != encoding) {
-		// Switched to MacRoman to make work so treat as single byte encoding.
-		for (int i=0; i<text.length(); i++) {
-			CGFloat xPosition = CTLineGetOffsetForStringIndex(mLine, i+1, nullptr);
-			positions[i] = xPosition;
-		}
-		return;
-	}
-
-	// Map the widths given for UTF-16 characters back onto the UTF-8 input string
-	CFIndex fit = layoutMeasure.getStringLength();
-	int ui=0;
-	int i=0;
-	std::vector<CGFloat> linePositions(fit);
-	GetPositions(mLine, linePositions);
-	while (ui<fit) {
-		const unsigned char uch = text[i];
-		const unsigned int byteCount = UTF8BytesOfLead[uch];
-		const int codeUnits = UTF16LengthFromUTF8ByteCount(byteCount);
-		const CGFloat xPosition = linePositions[ui];
-		for (unsigned int bytePos=0; (bytePos<byteCount) && (i<text.length()); bytePos++) {
-			positions[i++] = xPosition;
-		}
-		ui += codeUnits;
-	}
-	XYPOSITION lastPos = 0.0f;
-	if (i > 0)
-		lastPos = positions[i-1];
-	while (i<text.length()) {
-		positions[i++] = lastPos;
-	}
-}
-
-XYPOSITION SurfaceImpl::WidthTextUTF8(const Font *font_, std::string_view text) {
-	const QuartzTextStyle *style = TextStyleFromFont(font_);
-	if (!style) {
-		return 1;
-	}
-	QuartzTextLayout layoutMeasure(text, kCFStringEncodingUTF8, style);
-	return static_cast<XYPOSITION>(layoutMeasure.MeasureStringWidth());
-}
-
-//--------------------------------------------------------------------------------------------------
-
 
 // This string contains a good range of characters to test for size.
 const char sizeString[] = "`~!@#$%^&*()-_=+\\|[]{};:\"\'<,>.?/1234567890"
 			  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-XYPOSITION SurfaceImpl::Ascent(const Font *font_) {
-	const QuartzTextStyle *style = TextStyleFromFont(font_);
-	if (!style) {
+XYPOSITION SurfaceImpl::Ascent(Font &font_) {
+	if (!font_.GetID())
 		return 1;
-	}
 
-	float ascent = style->getAscent();
+	float ascent = TextStyleFromFont(font_)->getAscent();
 	return ascent + 0.5f;
 
 }
 
-XYPOSITION SurfaceImpl::Descent(const Font *font_) {
-	const QuartzTextStyle *style = TextStyleFromFont(font_);
-	if (!style) {
+XYPOSITION SurfaceImpl::Descent(Font &font_) {
+	if (!font_.GetID())
 		return 1;
-	}
 
-	float descent = style->getDescent();
+	float descent = TextStyleFromFont(font_)->getDescent();
 	return descent + 0.5f;
 
 }
 
-XYPOSITION SurfaceImpl::InternalLeading(const Font *) {
+XYPOSITION SurfaceImpl::InternalLeading(Font &) {
 	return 0;
 }
 
-XYPOSITION SurfaceImpl::Height(const Font *font_) {
+XYPOSITION SurfaceImpl::Height(Font &font_) {
 
 	return Ascent(font_) + Descent(font_);
 }
 
-XYPOSITION SurfaceImpl::AverageCharWidth(const Font *font_) {
+XYPOSITION SurfaceImpl::AverageCharWidth(Font &font_) {
+
+	if (!font_.GetID())
+		return 1;
 
 	XYPOSITION width = WidthText(font_, sizeString);
 
@@ -1487,23 +1237,27 @@ XYPOSITION SurfaceImpl::AverageCharWidth(const Font *font_) {
 }
 
 void SurfaceImpl::SetClip(PRectangle rc) {
-	CGContextSaveGState(gc);
 	CGContextClipToRect(gc, PRectangleToCGRect(rc));
-}
-
-void SurfaceImpl::PopClip() {
-	CGContextRestoreGState(gc);
 }
 
 void SurfaceImpl::FlushCachedState() {
 	CGContextSynchronize(gc);
 }
 
-void SurfaceImpl::FlushDrawing() {
+void SurfaceImpl::SetUnicodeMode(bool unicodeMode_) {
+	unicodeMode = unicodeMode_;
 }
 
-std::unique_ptr<Surface> Surface::Allocate(Technology) {
-	return std::make_unique<SurfaceImpl>();
+void SurfaceImpl::SetDBCSMode(int codePage_) {
+	if (codePage_ && (codePage_ != SC_CP_UTF8))
+		codePage = codePage_;
+}
+
+void SurfaceImpl::SetBidiR2L(bool) {
+}
+
+Surface *Surface::Allocate(int) {
+	return new SurfaceImpl();
 }
 
 //----------------- Window -------------------------------------------------------------------------
@@ -1512,7 +1266,7 @@ std::unique_ptr<Surface> Surface::Allocate(Technology) {
 // be either an NSWindow or NSView and the code will check the type
 // before performing an action.
 
-Window::~Window() noexcept {
+Window::~Window() {
 }
 
 // Window::Destroy needs to see definition of ListBoxImpl so is located after ListBoxImpl
@@ -1544,8 +1298,8 @@ PRectangle Window::GetPosition() const {
 		CGFloat screenHeight = ScreenMax();
 		// Invert screen positions to match Scintilla
 		return PRectangle(
-			       NSMinX(rect), screenHeight - NSMaxY(rect),
-			       NSMaxX(rect), screenHeight - NSMinY(rect));
+			       static_cast<XYPOSITION>(NSMinX(rect)), static_cast<XYPOSITION>(screenHeight - NSMaxY(rect)),
+			       static_cast<XYPOSITION>(NSMaxX(rect)), static_cast<XYPOSITION>(screenHeight - NSMinY(rect)));
 	} else {
 		return PRectangle(0, 0, 1, 1);
 	}
@@ -1589,7 +1343,7 @@ void Window::SetPositionRelative(PRectangle rc, const Window *window) {
 //--------------------------------------------------------------------------------------------------
 
 PRectangle Window::GetClientPosition() const {
-	// This means, in macOS terms, get the "frame bounds". Call GetPosition, just like on Win32.
+	// This means, in MacOS X terms, get the "frame bounds". Call GetPosition, just like on Win32.
 	return GetPosition();
 }
 
@@ -1652,6 +1406,12 @@ void Window::InvalidateRectangle(PRectangle rc) {
 
 //--------------------------------------------------------------------------------------------------
 
+void Window::SetFont(Font &) {
+	// Implemented on list subclass on Cocoa.
+}
+
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Converts the Scintilla cursor enum into an NSCursor and stores it in the associated NSView,
  * which then will take care to set up a new mouse tracking rectangle.
@@ -1661,7 +1421,7 @@ void Window::SetCursor(Cursor curs) {
 		id idWin = (__bridge id)(wid);
 		if ([idWin isKindOfClass: [SCIContentView class]]) {
 			SCIContentView *container = idWin;
-			[container setCursor: static_cast<int>(curs)];
+			[container setCursor: curs];
 		}
 	}
 }
@@ -1684,8 +1444,8 @@ PRectangle Window::GetMonitorRect(Point) {
 			CGFloat screenHeight = rect.origin.y + rect.size.height;
 			// Invert screen positions to match Scintilla
 			PRectangle rcWork(
-				NSMinX(rect), screenHeight - NSMaxY(rect),
-				NSMaxX(rect), screenHeight - NSMinY(rect));
+				static_cast<XYPOSITION>(NSMinX(rect)), static_cast<XYPOSITION>(screenHeight - NSMaxY(rect)),
+				static_cast<XYPOSITION>(NSMaxX(rect)), static_cast<XYPOSITION>(screenHeight - NSMinY(rect)));
 			PRectangle rcMonitor(rcWork.left - rcPosition.left,
 					     rcWork.top - rcPosition.top,
 					     rcWork.right - rcPosition.left,
@@ -1706,8 +1466,8 @@ static NSImage *ImageFromXPM(XPM *pxpm) {
 		const int width = pxpm->GetWidth();
 		const int height = pxpm->GetHeight();
 		PRectangle rcxpm(0, 0, width, height);
-		std::unique_ptr<Surface> surfaceBase(Surface::Allocate(Technology::Default));
-		std::unique_ptr<Surface> surfaceXPM = surfaceBase->AllocatePixMap(width, height);
+		std::unique_ptr<Surface> surfaceXPM(Surface::Allocate(SC_TECHNOLOGY_DEFAULT));
+		surfaceXPM->InitPixMap(width, height, NULL, NULL);
 		SurfaceImpl *surfaceIXPM = static_cast<SurfaceImpl *>(surfaceXPM.get());
 		CGContextClearRect(surfaceIXPM->GetContext(), CGRectMake(0, 0, width, height));
 		pxpm->Draw(surfaceXPM.get(), rcxpm);
@@ -1869,7 +1629,7 @@ private:
 	XYPOSITION maxItemWidth;
 	unsigned int aveCharWidth;
 	XYPOSITION maxIconWidth;
-	std::unique_ptr<Font> font;
+	Font font;
 	int maxWidth;
 
 	NSTableView *table;
@@ -1905,20 +1665,20 @@ public:
 	}
 
 	// ListBox methods
-	void SetFont(const Font *font_) override;
-	void Create(Window &parent, int ctrlID, Scintilla::Internal::Point pt, int lineHeight_, bool unicodeMode_, Technology technology_) override;
+	void SetFont(Font &font) override;
+	void Create(Window &parent, int ctrlID, Scintilla::Point pt, int lineHeight_, bool unicodeMode_, int technology_) override;
 	void SetAverageCharWidth(int width) override;
 	void SetVisibleRows(int rows) override;
 	int GetVisibleRows() const override;
 	PRectangle GetDesiredRect() override;
 	int CaretFromEdge() override;
-	void Clear() noexcept override;
+	void Clear() override;
 	void Append(char *s, int type = -1) override;
 	int Length() override;
 	void Select(int n) override;
 	int GetSelection() override;
 	int Find(const char *prefix) override;
-	std::string GetValue(int n) override;
+	void GetValue(int n, char *value, int len) override;
 	void RegisterImage(int type, const char *xpm_data) override;
 	void RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage) override;
 	void ClearRegisteredImages() override;
@@ -1926,7 +1686,6 @@ public:
 		delegate = lbDelegate;
 	}
 	void SetList(const char *list, char separator, char typesep) override;
-	void SetOptions(ListOptions options_) override;
 
 	// To clean up when closed
 	void ReleaseViews();
@@ -1939,8 +1698,8 @@ public:
 	void SelectionChange() override;
 };
 
-void ListBoxImpl::Create(Window & /*parent*/, int /*ctrlID*/, Scintilla::Internal::Point pt,
-			 int lineHeight_, bool unicodeMode_, Technology) {
+void ListBoxImpl::Create(Window & /*parent*/, int /*ctrlID*/, Scintilla::Point pt,
+			 int lineHeight_, bool unicodeMode_, int) {
 	lineHeight = lineHeight_;
 	unicodeMode = unicodeMode_;
 	maxWidth = 2000;
@@ -1950,7 +1709,7 @@ void ListBoxImpl::Create(Window & /*parent*/, int /*ctrlID*/, Scintilla::Interna
 						      styleMask: NSWindowStyleMaskBorderless
 							backing: NSBackingStoreBuffered
 							  defer: NO];
-	[winLB setLevel: NSModalPanelWindowLevel+1];
+	[winLB setLevel: NSFloatingWindowLevel];
 	[winLB setHasShadow: YES];
 	NSRect scRect = NSMakeRect(0, 0, lbRect.size.width, lbRect.size.height);
 	scroller = [[NSScrollView alloc] initWithFrame: scRect];
@@ -1981,19 +1740,15 @@ void ListBoxImpl::Create(Window & /*parent*/, int /*ctrlID*/, Scintilla::Interna
 	table.target = ds;
 	table.doubleAction = @selector(doubleClick:);
 	table.selectionHighlightStyle = NSTableViewSelectionHighlightStyleSourceList;
-
-	if (@available(macOS 11.0, *)) {
-		[table setStyle: NSTableViewStylePlain];
-	}
-
 	wid = (__bridge_retained WindowID)winLB;
 }
 
-void ListBoxImpl::SetFont(const Font *font_) {
+void ListBoxImpl::SetFont(Font &font_) {
 	// NSCell setFont takes an NSFont* rather than a CTFontRef but they
 	// are the same thing toll-free bridged.
 	QuartzTextStyle *style = TextStyleFromFont(font_);
-	font = std::make_unique<FontQuartz>(style);
+	font.Release();
+	font.SetID(new QuartzTextStyle(*style));
 	NSFont *pfont = (__bridge NSFont *)style->getFontRef();
 	[colText.dataCell setFont: pfont];
 	CGFloat itemHeight = std::ceil(pfont.boundingRectForFont.size.height);
@@ -2016,13 +1771,8 @@ PRectangle ListBoxImpl::GetDesiredRect() {
 	PRectangle rcDesired;
 	rcDesired = GetPosition();
 
-	CGFloat itemHeight;
-	if (@available(macOS 11.0, *)) {
-		itemHeight = table.rowHeight;
-	} else {
-		// There appears to be an extra pixel above and below the row contents
-		itemHeight = table.rowHeight + 2;
-	}
+	// There appears to be an extra pixel above and below the row contents
+	CGFloat itemHeight = table.rowHeight + 2;
 
 	int rows = Length();
 	if ((rows == 0) || (rows > desiredVisibleRows))
@@ -2062,7 +1812,7 @@ void ListBoxImpl::ReleaseViews() {
 	ds = nil;
 }
 
-void ListBoxImpl::Clear() noexcept {
+void ListBoxImpl::Clear() {
 	maxItemWidth = 0;
 	maxIconWidth = 0;
 	ld.Clear();
@@ -2072,15 +1822,15 @@ void ListBoxImpl::Append(char *s, int type) {
 	int count = Length();
 	ld.Add(count, type, s);
 
-	Scintilla::Internal::SurfaceImpl surface;
-	XYPOSITION width = surface.WidthText(font.get(), s);
+	Scintilla::SurfaceImpl surface;
+	XYPOSITION width = surface.WidthText(font, s);
 	if (width > maxItemWidth) {
 		maxItemWidth = width;
 		colText.width = maxItemWidth;
 	}
 	NSImage *img = images[@(type)];
 	if (img) {
-		XYPOSITION widthIcon = img.size.width;
+		XYPOSITION widthIcon = static_cast<XYPOSITION>(img.size.width);
 		if (widthIcon > maxIconWidth) {
 			[colIcon setHidden: NO];
 			maxIconWidth = widthIcon;
@@ -2116,9 +1866,6 @@ void ListBoxImpl::SetList(const char *list, char separator, char typesep) {
 	[table reloadData];
 }
 
-void ListBoxImpl::SetOptions(ListOptions) {
-}
-
 int ListBoxImpl::Length() {
 	return ld.Length();
 }
@@ -2143,12 +1890,13 @@ int ListBoxImpl::Find(const char *prefix) {
 	return - 1;
 }
 
-std::string ListBoxImpl::GetValue(int n) {
+void ListBoxImpl::GetValue(int n, char *value, int len) {
 	const char *textString = ld.GetString(n);
-	if (textString) {
-		return textString;
+	if (textString == NULL) {
+		value[0] = '\0';
+		return;
 	}
-	return std::string();
+	strlcpy(value, textString, len);
 }
 
 void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
@@ -2209,16 +1957,17 @@ void ListBoxImpl::SelectionChange() {
 ListBox::ListBox() noexcept {
 }
 
-ListBox::~ListBox() noexcept {
+ListBox::~ListBox() {
 }
 
-std::unique_ptr<ListBox> ListBox::Allocate() {
-	return std::make_unique<ListBoxImpl>();
+ListBox *ListBox::Allocate() {
+	ListBoxImpl *lb = new ListBoxImpl();
+	return lb;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void Window::Destroy() noexcept {
+void Window::Destroy() {
 	ListBoxImpl *listbox = dynamic_cast<ListBoxImpl *>(this);
 	if (listbox) {
 		listbox->ReleaseViews();
@@ -2247,7 +1996,7 @@ NSMenu
 
 //--------------------------------------------------------------------------------------------------
 
-- (void) setOwner: (Scintilla::Internal::ScintillaCocoa *) newOwner {
+- (void) setOwner: (Scintilla::ScintillaCocoa *) newOwner {
 	owner = newOwner;
 }
 
@@ -2268,28 +2017,28 @@ void Menu::CreatePopUp() {
 
 //--------------------------------------------------------------------------------------------------
 
-void Menu::Destroy() noexcept {
+void Menu::Destroy() {
 	CFBridgingRelease(mid);
 	mid = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void Menu::Show(Point, const Window &) {
+void Menu::Show(Point, Window &) {
 	// Cocoa menus are handled a bit differently. We only create the menu. The framework
 	// takes care to show it properly.
 }
 
 //----------------- Platform -----------------------------------------------------------------------
 
-ColourRGBA Platform::Chrome() {
-	return ColourRGBA(0xE0, 0xE0, 0xE0);
+ColourDesired Platform::Chrome() {
+	return ColourDesired(0xE0, 0xE0, 0xE0);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-ColourRGBA Platform::ChromeHighlight() {
-	return ColourRGBA(0xFF, 0xFF, 0xFF);
+ColourDesired Platform::ChromeHighlight() {
+	return ColourDesired(0xFF, 0xFF, 0xFF);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2298,7 +2047,8 @@ ColourRGBA Platform::ChromeHighlight() {
  * Returns the currently set system font for the user.
  */
 const char *Platform::DefaultFont() {
-	return "Menlo-Regular";
+	NSString *name = [[NSUserDefaults standardUserDefaults] stringForKey: @"NSFixedPitchFont"];
+	return name.UTF8String;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2307,7 +2057,8 @@ const char *Platform::DefaultFont() {
  * Returns the currently set system font size for the user.
  */
 int Platform::DefaultFontSize() {
-	return 11;
+	return static_cast<int>([[NSUserDefaults standardUserDefaults]
+				 integerForKey: @"NSFixedPitchFontSize"]);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2319,7 +2070,8 @@ int Platform::DefaultFontSize() {
  * @return time span in milliseconds
  */
 unsigned int Platform::DoubleClickTime() {
-	NSTimeInterval threshold = NSEvent.doubleClickInterval;
+	float threshold = [[NSUserDefaults standardUserDefaults] floatForKey:
+								 @"com.apple.mouse.doubleClickThreshold"];
 	if (threshold == 0)
 		threshold = 0.5;
 	return static_cast<unsigned int>(threshold * 1000.0);
@@ -2330,13 +2082,13 @@ unsigned int Platform::DoubleClickTime() {
 //#define TRACE
 #ifdef TRACE
 
-void Platform::DebugDisplay(const char *s) noexcept {
+void Platform::DebugDisplay(const char *s) {
 	fprintf(stderr, "%s", s);
 }
 
 //--------------------------------------------------------------------------------------------------
 
-void Platform::DebugPrintf(const char *format, ...) noexcept {
+void Platform::DebugPrintf(const char *format, ...) {
 	const int BUF_SIZE = 2000;
 	char buffer[BUF_SIZE];
 
@@ -2349,9 +2101,9 @@ void Platform::DebugPrintf(const char *format, ...) noexcept {
 
 #else
 
-void Platform::DebugDisplay(const char *) noexcept {}
+void Platform::DebugDisplay(const char *) {}
 
-void Platform::DebugPrintf(const char *, ...) noexcept {}
+void Platform::DebugPrintf(const char *, ...) {}
 
 #endif
 
@@ -2359,7 +2111,7 @@ void Platform::DebugPrintf(const char *, ...) noexcept {}
 
 static bool assertionPopUps = true;
 
-bool Platform::ShowAssertionPopUps(bool assertionPopUps_) noexcept {
+bool Platform::ShowAssertionPopUps(bool assertionPopUps_) {
 	bool ret = assertionPopUps;
 	assertionPopUps = assertionPopUps_;
 	return ret;
@@ -2367,14 +2119,65 @@ bool Platform::ShowAssertionPopUps(bool assertionPopUps_) noexcept {
 
 //--------------------------------------------------------------------------------------------------
 
-void Platform::Assert(const char *c, const char *file, int line) noexcept {
+void Platform::Assert(const char *c, const char *file, int line) {
 	char buffer[2000];
 	snprintf(buffer, sizeof(buffer), "Assertion [%s] failed at %s %d\r\n", c, file, line);
 	Platform::DebugDisplay(buffer);
 #ifdef DEBUG
-	// Jump into debugger in assert on Mac
-	pthread_kill(pthread_self(), SIGTRAP);
+	// Jump into debugger in assert on Mac (CL269835)
+	::Debugger();
 #endif
 }
 
+//----------------- DynamicLibrary -----------------------------------------------------------------
+
+/**
+ * Platform-specific module loading and access.
+ * Uses POSIX calls dlopen, dlsym, dlclose.
+ */
+
+class DynamicLibraryImpl : public DynamicLibrary {
+protected:
+	void *m;
+public:
+	explicit DynamicLibraryImpl(const char *modulePath) noexcept {
+		m = dlopen(modulePath, RTLD_LAZY);
+	}
+	// Deleted so DynamicLibraryImpl objects can not be copied.
+	DynamicLibraryImpl(const DynamicLibraryImpl&) = delete;
+	DynamicLibraryImpl(DynamicLibraryImpl&&) = delete;
+	DynamicLibraryImpl&operator=(const DynamicLibraryImpl&) = delete;
+	DynamicLibraryImpl&operator=(DynamicLibraryImpl&&) = delete;
+
+	~DynamicLibraryImpl() override {
+		if (m)
+			dlclose(m);
+	}
+
+	// Use dlsym to get a pointer to the relevant function.
+	Function FindFunction(const char *name) override {
+		if (m) {
+			return dlsym(m, name);
+		} else {
+			return nullptr;
+		}
+	}
+
+	bool IsValid() override {
+		return m != nullptr;
+	}
+};
+
+/**
+* Implements the platform specific part of library loading.
+*
+* @param modulePath The path to the module to load.
+* @return A library instance or nullptr if the module could not be found or another problem occurred.
+*/
+
+DynamicLibrary *DynamicLibrary::Load(const char *modulePath) {
+	return static_cast<DynamicLibrary *>(new DynamicLibraryImpl(modulePath));
+}
+
 //--------------------------------------------------------------------------------------------------
+

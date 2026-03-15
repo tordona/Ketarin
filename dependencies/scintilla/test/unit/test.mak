@@ -4,29 +4,21 @@
 DEL = del /q
 EXE = unitTest.exe
 
-INCLUDEDIRS = /I../../include /I../../src
+INCLUDEDIRS = /I../../include /I../../src /I../../lexlib
 
-CXXFLAGS = /MP /EHsc /std:c++17 $(OPTIMIZATION) /nologo /D_HAS_AUTO_PTR_ETC=1 /wd 4805 $(INCLUDEDIRS)
+CXXFLAGS = /EHsc /std:c++17 /D_HAS_AUTO_PTR_ETC=1 /wd 4805 $(INCLUDEDIRS)
 
 # Files in this directory containing tests
 TESTSRC=test*.cxx
 # Files being tested from scintilla/src directory
 TESTEDSRC=\
- ../../src/CaseConvert.cxx \
- ../../src/CaseFolder.cxx \
+ ../../lexlib/WordList.cxx \
  ../../src/CellBuffer.cxx \
- ../../src/ChangeHistory.cxx \
- ../../src/CharacterCategoryMap.cxx \
  ../../src/CharClassify.cxx \
  ../../src/ContractionState.cxx \
  ../../src/Decoration.cxx \
- ../../src/Document.cxx \
- ../../src/Geometry.cxx \
  ../../src/PerLine.cxx \
- ../../src/RESearch.cxx \
  ../../src/RunStyles.cxx \
- ../../src/Selection.cxx \
- ../../src/UndoHistory.cxx \
  ../../src/UniConversion.cxx \
  ../../src/UniqueString.cxx
 

@@ -95,7 +95,6 @@
 		mCurrentCaretX = 0;
 		mCurrentCaretY = 0;
 		[self createItems];
-		self.clipsToBounds = TRUE;
 	}
 	return self;
 }

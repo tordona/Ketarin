@@ -10,10 +10,11 @@
 from __future__ import with_statement
 from __future__ import unicode_literals
 
-import ctypes, unittest
+import codecs, ctypes, os, sys, unittest
 
-from MessageNumbers import msgs
+from MessageNumbers import msgs, sgsm
 
+import ctypes
 user32 = ctypes.windll.user32
 
 import XiteWin as Xite
@@ -31,8 +32,8 @@ class TestWins(unittest.TestCase):
 
 	# Helper methods
 
-	def Send(self, msg, wp, lp):
-		return user32.SendMessageW(self.sciHwnd, msgs[msg], wp, lp)
+	def Send(self, msg, w, l):
+		return user32.SendMessageW(self.sciHwnd, msgs[msg], w, l)
 
 	def GetTextLength(self):
 		return self.Send("WM_GETTEXTLENGTH", 0, 0)
@@ -43,13 +44,13 @@ class TestWins(unittest.TestCase):
 		return self.Send("WM_GETTEXT", n, s)
 
 	def TextValue(self):
-		self.assertEqual(self.ed.GetStatus(), 0)
+		self.assertEquals(self.ed.GetStatus(), 0)
 		lenValue = self.GetTextLength()
 		lenValueWithNUL = lenValue + 1
 		value = ctypes.create_unicode_buffer(lenValueWithNUL)
 		lenData = self.GetText(lenValueWithNUL, value)
-		self.assertEqual(self.ed.GetStatus(), 0)
-		self.assertEqual(lenData, lenValue)
+		self.assertEquals(self.ed.GetStatus(), 0)
+		self.assertEquals(lenData, lenValue)
 		return value.value
 
 	def SetText(self, s):
@@ -59,19 +60,19 @@ class TestWins(unittest.TestCase):
 
 	def testSetText(self):
 		self.SetText(b"ab")
-		self.assertEqual(self.ed.Length, 2)
+		self.assertEquals(self.ed.Length, 2)
 
 	def testGetTextLength(self):
 		self.SetText(b"ab")
-		self.assertEqual(self.GetTextLength(), 2)
+		self.assertEquals(self.GetTextLength(), 2)
 
 	def testGetText(self):
 		self.SetText(b"ab")
 		data = ctypes.create_unicode_buffer(100)
 		lenData = self.GetText(100, data)
-		self.assertEqual(lenData, 2)
-		self.assertEqual(len(data.value), 2)
-		self.assertEqual(data.value, "ab")
+		self.assertEquals(lenData, 2)
+		self.assertEquals(len(data.value), 2)
+		self.assertEquals(data.value, "ab")
 
 	def testGetUTF8Text(self):
 		self.ed.SetCodePage(65001)
@@ -79,7 +80,7 @@ class TestWins(unittest.TestCase):
 		tu8 = t.encode("UTF-8")
 		self.SetText(tu8)
 		value = self.TextValue()
-		self.assertEqual(value, t)
+		self.assertEquals(value, t)
 
 	def testGetBadUTF8Text(self):
 		self.ed.SetCodePage(65001)
@@ -87,8 +88,8 @@ class TestWins(unittest.TestCase):
 		t = "t\xc2"
 		self.SetText(tu8)
 		value = self.TextValue()
-		self.assertEqual(len(value), 2)
-		self.assertEqual(value, t)
+		self.assertEquals(len(value), 2)
+		self.assertEquals(value, t)
 
 	def testGetJISText(self):
 		self.ed.SetCodePage(932)
@@ -96,8 +97,8 @@ class TestWins(unittest.TestCase):
 		tu8 = t.encode("shift-jis")
 		self.SetText(tu8)
 		value = self.TextValue()
-		self.assertEqual(len(value), 1)
-		self.assertEqual(value, t)
+		self.assertEquals(len(value), 1)
+		self.assertEquals(value, t)
 
 	def testGetBadJISText(self):
 		self.ed.SetCodePage(932)
@@ -110,24 +111,24 @@ class TestWins(unittest.TestCase):
 		privateBad = '[\uf8f3]'
 		self.SetText(tu8)
 		value = self.TextValue()
-		self.assertEqual(len(value), 3)
-		self.assertEqual(value, katakanaMiddleDot)
-
+		self.assertEquals(len(value), 3)
+		self.assertEquals(value, katakanaMiddleDot)
+		
 		# This is even less valid Shift-JIS
 		tu8 = b'[\xff]'
 		self.SetText(tu8)
 		value = self.TextValue()
-		self.assertEqual(len(value), 3)
-		self.assertEqual(value, privateBad)
+		self.assertEquals(len(value), 3)
+		self.assertEquals(value, privateBad)
 
 	def testGetTextLong(self):
-		self.assertEqual(self.ed.GetStatus(), 0)
+		self.assertEquals(self.ed.GetStatus(), 0)
 		self.SetText(b"ab")
 		data = ctypes.create_unicode_buffer(100)
 		lenData = self.GetText(4, data)
-		self.assertEqual(self.ed.GetStatus(), 0)
-		self.assertEqual(lenData, 2)
-		self.assertEqual(data.value, "ab")
+		self.assertEquals(self.ed.GetStatus(), 0)
+		self.assertEquals(lenData, 2)
+		self.assertEquals(data.value, "ab")
 
 	def testGetTextLongNonASCII(self):
 		# With 1 multibyte character in document ask for 4 and ensure 1 character
@@ -138,38 +139,38 @@ class TestWins(unittest.TestCase):
 		self.SetText(tu8)
 		data = ctypes.create_unicode_buffer(100)
 		lenData = self.GetText(4, data)
-		self.assertEqual(self.ed.GetStatus(), 0)
-		self.assertEqual(lenData, 1)
-		self.assertEqual(data.value, t)
+		self.assertEquals(self.ed.GetStatus(), 0)
+		self.assertEquals(lenData, 1)
+		self.assertEquals(data.value, t)
 
 	def testGetTextShort(self):
-		self.assertEqual(self.ed.GetStatus(), 0)
+		self.assertEquals(self.ed.GetStatus(), 0)
 		self.SetText(b"ab")
 		data = ctypes.create_unicode_buffer(100)
 		lenData = self.GetText(2, data)
-		self.assertEqual(self.ed.GetStatus(), 0)
-		self.assertEqual(lenData, 1)
-		self.assertEqual(data.value, "a")
+		self.assertEquals(self.ed.GetStatus(), 0)
+		self.assertEquals(lenData, 1)
+		self.assertEquals(data.value, "a")
 
 	def testGetTextJustNUL(self):
-		self.assertEqual(self.ed.GetStatus(), 0)
+		self.assertEquals(self.ed.GetStatus(), 0)
 		self.SetText(b"ab")
 		data = ctypes.create_unicode_buffer(100)
 		lenData = self.GetText(1, data)
-		self.assertEqual(self.ed.GetStatus(), 0)
+		self.assertEquals(self.ed.GetStatus(), 0)
 		#~ print(data)
-		self.assertEqual(lenData, 0)
-		self.assertEqual(data.value, "")
+		self.assertEquals(lenData, 0)
+		self.assertEquals(data.value, "")
 
 	def testGetTextZeroLength(self):
-		self.assertEqual(self.ed.GetStatus(), 0)
+		self.assertEquals(self.ed.GetStatus(), 0)
 		self.SetText(b"ab")
 		data = ctypes.create_unicode_buffer(100)
 		lenData = self.GetText(0, data)
-		self.assertEqual(self.ed.GetStatus(), 0)
+		self.assertEquals(self.ed.GetStatus(), 0)
 		#~ print(data)
-		self.assertEqual(lenData, 0)
-		self.assertEqual(data.value, "")
+		self.assertEquals(lenData, 0)
+		self.assertEquals(data.value, "")
 
 if __name__ == '__main__':
 	uu = Xite.main("win32Tests")

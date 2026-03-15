@@ -1,6 +1,4 @@
-/** @file testContractionState.cxx
- ** Unit Tests for Scintilla internal data structures
- **/
+// Unit Tests for Scintilla internal data structures
 
 #include <cstddef>
 #include <cstring>
@@ -8,11 +6,10 @@
 #include <stdexcept>
 #include <string_view>
 #include <vector>
-#include <optional>
 #include <algorithm>
 #include <memory>
 
-#include "Debugging.h"
+#include "Platform.h"
 
 #include "Position.h"
 #include "UniqueString.h"
@@ -23,7 +20,7 @@
 
 #include "catch.hpp"
 
-using namespace Scintilla::Internal;
+using namespace Scintilla;
 
 // Test ContractionState.
 
@@ -107,27 +104,12 @@ TEST_CASE("ContractionState") {
 		REQUIRE(true == pcs->GetVisible(0));
 		REQUIRE(false == pcs->GetVisible(1));
 		REQUIRE(true == pcs->HiddenLines());
-		REQUIRE(1 == pcs->LinesDisplayed());
 
 		pcs->SetVisible(1, 1, true);
 		for (int l=0;l<2;l++) {
 			REQUIRE(true == pcs->GetVisible(0));
 		}
 		REQUIRE(false == pcs->HiddenLines());
-	}
-
-	SECTION("Hide All") {
-		pcs->InsertLines(0,1);
-		for (int l=0;l<2;l++) {
-			REQUIRE(true == pcs->GetVisible(0));
-		}
-		REQUIRE(false == pcs->HiddenLines());
-
-		pcs->SetVisible(0, 1, false);
-		REQUIRE(false == pcs->GetVisible(0));
-		REQUIRE(false == pcs->GetVisible(1));
-		REQUIRE(true == pcs->HiddenLines());
-		REQUIRE(0 == pcs->LinesDisplayed());
 	}
 
 	SECTION("Contracting") {
@@ -147,28 +129,6 @@ TEST_CASE("ContractionState") {
 		REQUIRE(-1 == pcs->ContractedNext(3));
 
 		pcs->SetExpanded(2, true);
-		REQUIRE(true == pcs->GetExpanded(1));
-		REQUIRE(true == pcs->GetExpanded(2));
-		REQUIRE(true == pcs->GetExpanded(3));
-	}
-
-	SECTION("ExpandAll") {
-		pcs->InsertLines(0,4);
-		for (int l=0;l<4;l++) {
-			REQUIRE(true == pcs->GetExpanded(l));
-		}
-
-		pcs->SetExpanded(2, false);
-		REQUIRE(true == pcs->GetExpanded(1));
-		REQUIRE(false == pcs->GetExpanded(2));
-		REQUIRE(true == pcs->GetExpanded(3));
-
-		pcs->SetExpanded(1, false);
-		REQUIRE(false == pcs->GetExpanded(1));
-		REQUIRE(false == pcs->GetExpanded(2));
-		REQUIRE(true == pcs->GetExpanded(3));
-
-		REQUIRE(true == pcs->ExpandAll());
 		REQUIRE(true == pcs->GetExpanded(1));
 		REQUIRE(true == pcs->GetExpanded(2));
 		REQUIRE(true == pcs->GetExpanded(3));

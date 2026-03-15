@@ -8,7 +8,8 @@ from __future__ import unicode_literals
 import os, platform, sys, unittest
 
 import ctypes
-from ctypes import c_int, c_char_p, c_wchar_p, c_ushort, c_uint
+from ctypes import wintypes
+from ctypes import c_int, c_ulong, c_char_p, c_wchar_p, c_ushort, c_uint, c_long
 from ctypes.wintypes import HWND, WPARAM, LPARAM, HANDLE, HBRUSH, LPCWSTR
 user32=ctypes.windll.user32
 gdi32=ctypes.windll.gdi32
@@ -18,34 +19,13 @@ from MessageNumbers import msgs, sgsm
 import ScintillaCallable
 import XiteMenu
 
-scintillaIncludesLexers = False
-# Lexilla may optionally be tested it is built and can be loaded
-lexillaAvailable = False
-
 scintillaDirectory = ".."
 scintillaIncludeDirectory = os.path.join(scintillaDirectory, "include")
 scintillaScriptsDirectory = os.path.join(scintillaDirectory, "scripts")
 sys.path.append(scintillaScriptsDirectory)
 import Face
 
-# To debug a particular Scintilla build, set environment variable SCINTILLA_BIN to its directory
-scintillaBinDirectory = os.environ.get('SCINTILLA_BIN', os.path.join(scintillaDirectory, "bin"))
-
-lexillaDirectory = os.path.join(scintillaDirectory, "..", "lexilla")
-lexillaBinDirectory = os.path.join(lexillaDirectory, "bin")
-lexillaIncludeDirectory = os.path.join(lexillaDirectory, "include")
-
-lexName = "Lexilla.DLL"
-try:
-	lexillaDLLPath = os.path.join(lexillaBinDirectory, lexName)
-	lexillaLibrary = ctypes.cdll.LoadLibrary(lexillaDLLPath)
-	createLexer = lexillaLibrary.CreateLexer
-	createLexer.restype = ctypes.c_void_p
-	lexillaAvailable = True
-	print("Found Lexilla")
-except OSError:
-	print("Can't find " + lexName)
-	print("Python is built for " + " ".join(platform.architecture()))
+scintillaBinDirectory = os.path.join(scintillaDirectory, "bin")
 
 WFUNC = ctypes.WINFUNCTYPE(c_int, HWND, c_uint, WPARAM, LPARAM)
 
@@ -55,7 +35,6 @@ WS_OVERLAPPEDWINDOW = 0xcf0000
 WS_VISIBLE = 0x10000000
 WS_HSCROLL = 0x100000
 WS_VSCROLL = 0x200000
-CS_GLOBALCLASS = 0x4000
 WA_INACTIVE = 0
 MF_POPUP = 16
 MF_SEPARATOR = 0x800
@@ -141,12 +120,12 @@ class WNDCLASS(ctypes.Structure):
 		('lpzClassName', LPCWSTR),
 	)
 
-hinst = None
+hinst = ctypes.windll.kernel32.GetModuleHandleW(0)
 
 def RegisterClass(name, func, background = 0):
 	# register a window class for toplevel windows.
 	wc = WNDCLASS()
-	wc.style = CS_GLOBALCLASS
+	wc.style = 0
 	wc.lpfnWndProc = func
 	wc.cls_extra = 0
 	wc.wnd_extra = 0
@@ -163,23 +142,6 @@ class XiteWin():
 	def __init__(self, test=""):
 		self.face = Face.Face()
 		self.face.ReadFromFile(os.path.join(scintillaIncludeDirectory, "Scintilla.iface"))
-		try:
-			faceLex = Face.Face()
-			faceLex.ReadFromFile(os.path.join(lexillaIncludeDirectory, "LexicalStyles.iface"))
-			self.face.features.update(faceLex.features)
-		except FileNotFoundError:
-			print("Can't find " + "LexicalStyles.iface")
-		if scintillaIncludesLexers:
-			sciName = "SciLexer.DLL"
-		else:
-			sciName = "Scintilla.DLL"
-		try:
-			scintillaDLLPath = os.path.join(scintillaBinDirectory, sciName)
-			ctypes.cdll.LoadLibrary(scintillaDLLPath)
-		except OSError:
-			print("Can't find " + sciName)
-			print("Python is built for " + " ".join(platform.architecture()))
-			sys.exit()
 
 		self.titleDirty = True
 		self.fullPath = ""
@@ -220,6 +182,13 @@ class XiteWin():
 
 	def OnCreate(self, hwnd):
 		self.win = hwnd
+		try:
+			scintillaDLLPath = os.path.join(scintillaBinDirectory, "SciLexer.DLL")
+			ctypes.cdll.LoadLibrary(scintillaDLLPath)
+		except OSError:
+			print("Can't find SciLexer.DLL")
+			print("Python is built for " + " ".join(platform.architecture()))
+			sys.exit()
 		self.sciHwnd = user32.CreateWindowExW(0,
 			"Scintilla", "Source",
 			WS_CHILD | WS_VSCROLL | WS_HSCROLL | WS_CLIPCHILDREN,
@@ -237,23 +206,15 @@ class XiteWin():
 
 		self.FocusOnEditor()
 
-	def ChooseLexer(self, lexer):
-		if scintillaIncludesLexers:
-			self.ed.LexerLanguage = lexer
-		elif lexillaAvailable:
-			pLexilla = createLexer(lexer)
-			self.ed.SetILexer(0, pLexilla)
-		else:	# No lexers available
-			pass
 
 	def Invalidate(self):
 		user32.InvalidateRect(self.win, 0, 0)
 
-	def WndProc(self, h, m, wp, lp):
+	def WndProc(self, h, m, w, l):
 		user32.DefWindowProcW.argtypes = [HWND, c_uint, WPARAM, LPARAM]
 		ms = sgsm.get(m, "XXX")
 		if trace:
-			print("%s %s %s %s" % (hex(h)[2:],ms,wp,lp))
+			print("%s %s %s %s" % (hex(h)[2:],ms,w,l))
 		if ms == "WM_CLOSE":
 			user32.PostQuitMessage(0)
 		elif ms == "WM_CREATE":
@@ -261,20 +222,20 @@ class XiteWin():
 			return 0
 		elif ms == "WM_SIZE":
 			# Work out size
-			if wp != 1:
+			if w != 1:
 				self.OnSize()
 			return 0
 		elif ms == "WM_COMMAND":
-			cmdCode = wp & 0xffff
+			cmdCode = w & 0xffff
 			if cmdCode in self.cmds:
 				self.Command(self.cmds[cmdCode])
 			return 0
 		elif ms == "WM_ACTIVATE":
-			if wp != WA_INACTIVE:
+			if w != WA_INACTIVE:
 				self.FocusOnEditor()
 			return 0
 		else:
-			return user32.DefWindowProcW(h, m, wp, lp)
+			return user32.DefWindowProcW(h, m, w, l)
 		return 0
 
 	def Command(self, name):
@@ -507,7 +468,7 @@ class XiteWin():
 		self.Open()
 
 	def CmdSave(self):
-		if (self.fullPath is None) or (len(self.fullPath) == 0):
+		if (self.fullPath == None) or (len(self.fullPath) == 0):
 			self.SaveAs()
 		else:
 			self.Save()

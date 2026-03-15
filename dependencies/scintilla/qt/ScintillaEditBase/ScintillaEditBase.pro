@@ -6,14 +6,13 @@
 
 QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-equals(QT_MAJOR_VERSION, 6): QT += core5compat
 
 TARGET = ScintillaEditBase
 TEMPLATE = lib
 CONFIG += lib_bundle
 CONFIG += c++1z
 
-VERSION = 5.6.0
+VERSION = 4.4.6
 
 SOURCES += \
     PlatQt.cpp \
@@ -23,7 +22,6 @@ SOURCES += \
     ../../src/ViewStyle.cxx \
     ../../src/UniqueString.cxx \
     ../../src/UniConversion.cxx \
-    ../../src/UndoHistory.cxx \
     ../../src/Style.cxx \
     ../../src/Selection.cxx \
     ../../src/ScintillaBase.cxx \
@@ -35,7 +33,7 @@ SOURCES += \
     ../../src/LineMarker.cxx \
     ../../src/KeyMap.cxx \
     ../../src/Indicator.cxx \
-    ../../src/Geometry.cxx \
+    ../../src/ExternalLexer.cxx \
     ../../src/EditView.cxx \
     ../../src/Editor.cxx \
     ../../src/EditModel.cxx \
@@ -44,14 +42,24 @@ SOURCES += \
     ../../src/DBCS.cxx \
     ../../src/ContractionState.cxx \
     ../../src/CharClassify.cxx \
-    ../../src/CharacterType.cxx \
-    ../../src/CharacterCategoryMap.cxx \
-    ../../src/ChangeHistory.cxx \
     ../../src/CellBuffer.cxx \
+    ../../src/Catalogue.cxx \
     ../../src/CaseFolder.cxx \
     ../../src/CaseConvert.cxx \
     ../../src/CallTip.cxx \
-    ../../src/AutoComplete.cxx
+    ../../src/AutoComplete.cxx \
+    ../../lexlib/WordList.cxx \
+    ../../lexlib/StyleContext.cxx \
+    ../../lexlib/PropSetSimple.cxx \
+    ../../lexlib/LexerSimple.cxx \
+    ../../lexlib/LexerNoExceptions.cxx \
+    ../../lexlib/LexerModule.cxx \
+    ../../lexlib/LexerBase.cxx \
+    ../../lexlib/DefaultLexer.cxx \
+    ../../lexlib/CharacterSet.cxx \
+    ../../lexlib/Accessor.cxx \
+    ../../lexlib/CharacterCategory.cxx \
+    $$files(../../lexers/*.cxx, false)
 
 HEADERS  += \
     PlatQt.h \
@@ -59,7 +67,6 @@ HEADERS  += \
     ScintillaEditBase.h \
     ../../src/XPM.h \
     ../../src/ViewStyle.h \
-    ../../src/UndoHistory.h \
     ../../src/UniConversion.h \
     ../../src/Style.h \
     ../../src/SplitVector.h \
@@ -68,34 +75,47 @@ HEADERS  += \
     ../../src/RunStyles.h \
     ../../src/RESearch.h \
     ../../src/PositionCache.h \
-    ../../src/Platform.h \
     ../../src/PerLine.h \
     ../../src/Partitioning.h \
     ../../src/LineMarker.h \
     ../../src/KeyMap.h \
     ../../src/Indicator.h \
-    ../../src/Geometry.h \
+    ../../src/FontQuality.h \
+    ../../src/ExternalLexer.h \
     ../../src/Editor.h \
     ../../src/Document.h \
     ../../src/Decoration.h \
     ../../src/ContractionState.h \
     ../../src/CharClassify.h \
-    ../../src/CharacterType.h \
-    ../../src/CharacterCategoryMap.h \
-    ../../src/ChangeHistory.h \
     ../../src/CellBuffer.h \
+    ../../src/Catalogue.h \
     ../../src/CaseFolder.h \
     ../../src/CaseConvert.h \
     ../../src/CallTip.h \
     ../../src/AutoComplete.h \
     ../../include/Scintilla.h \
-    ../../include/ILexer.h
+    ../../include/SciLexer.h \
+    ../../include/Platform.h \
+    ../../include/ILexer.h \
+    ../../lexlib/WordList.h \
+    ../../lexlib/StyleContext.h \
+    ../../lexlib/SparseState.h \
+    ../../lexlib/PropSetSimple.h \
+    ../../lexlib/OptionSet.h \
+    ../../lexlib/LexerSimple.h \
+    ../../lexlib/LexerNoExceptions.h \
+    ../../lexlib/LexerModule.h \
+    ../../lexlib/LexerBase.h \
+    ../../lexlib/LexAccessor.h \
+    ../../lexlib/CharacterSet.h \
+    ../../lexlib/CharacterCategory.h \
+    ../../lexlib/Accessor.h
 
 OTHER_FILES +=
 
-INCLUDEPATH += ../../include ../../src
+INCLUDEPATH += ../../include ../../src ../../lexlib
 
-DEFINES += SCINTILLA_QT=1 MAKING_LIBRARY=1
+DEFINES += SCINTILLA_QT=1 MAKING_LIBRARY=1 SCI_LEXER=1 _CRT_SECURE_NO_DEPRECATE=1
 CONFIG(release, debug|release) {
     DEFINES += NDEBUG=1
 }

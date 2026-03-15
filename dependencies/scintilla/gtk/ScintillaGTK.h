@@ -6,20 +6,11 @@
 #ifndef SCINTILLAGTK_H
 #define SCINTILLAGTK_H
 
-namespace Scintilla::Internal {
+namespace Scintilla {
 
 class ScintillaGTKAccessible;
 
 #define OBJECT_CLASS GObjectClass
-
-struct FontOptions {
-	cairo_antialias_t antialias {};
-	cairo_subpixel_order_t order {};
-	cairo_hint_style_t hint {};
-	FontOptions() noexcept = default;
-	explicit FontOptions(GtkWidget *widget) noexcept;
-	bool operator==(const FontOptions &other) const noexcept;
-};
 
 class ScintillaGTK : public ScintillaBase {
 	friend class ScintillaGTKAccessible;
@@ -30,15 +21,13 @@ class ScintillaGTK : public ScintillaBase {
 	Window scrollbarh;
 	GtkAdjustment *adjustmentv;
 	GtkAdjustment *adjustmenth;
+	Window wSelection;
 	int verticalScrollBarWidth;
 	int horizontalScrollBarHeight;
 
-	PRectangle rectangleClient;
-
 	SelectionText primary;
-	SelectionPosition posPrimary;
 
-	UniqueGdkEvent evbtn;
+	GdkEvent *evbtn;
 	guint buttonMouse;
 	bool capturedMouse;
 	bool dragWasDropped;
@@ -53,7 +42,6 @@ class ScintillaGTK : public ScintillaBase {
 	static inline GdkAtom atomUriList {};
 	static inline GdkAtom atomDROPFILES_DND {};
 	GdkAtom atomSought;
-	size_t inClearSelection = 0;
 
 #if PLAT_GTK_WIN32
 	CLIPFORMAT cfColumnSelect;
@@ -62,11 +50,8 @@ class ScintillaGTK : public ScintillaBase {
 	bool preeditInitialized;
 	Window wPreedit;
 	Window wPreeditDraw;
-	UniqueIMContext im_context;
+	GtkIMContext *im_context;
 	GUnicodeScript lastNonCommonScript;
-
-	GtkSettings *settings;
-	gulong settingsHandlerId;
 
 	// Wheel mouse support
 	unsigned int linesPerScroll;
@@ -84,8 +69,6 @@ class ScintillaGTK : public ScintillaBase {
 	bool repaintFullWindow;
 
 	guint styleIdleID;
-	guint scrollBarIdleID = 0;
-	FontOptions fontOptionsPrevious;
 	int accessibilityEnabled;
 	AtkObject *accessible;
 
@@ -96,7 +79,7 @@ public:
 	ScintillaGTK(ScintillaGTK &&) = delete;
 	ScintillaGTK &operator=(const ScintillaGTK &) = delete;
 	ScintillaGTK &operator=(ScintillaGTK &&) = delete;
-	~ScintillaGTK() override;
+	virtual ~ScintillaGTK();
 	static ScintillaGTK *FromWidget(GtkWidget *widget) noexcept;
 	static void ClassInit(OBJECT_CLASS *object_class, GtkWidgetClass *widget_class, GtkContainerClass *container_class);
 private:
@@ -109,19 +92,17 @@ private:
 	Sci::Position TargetAsUTF8(char *text) const;
 	Sci::Position EncodedFromUTF8(const char *utf8, char *encoded) const;
 	bool ValidCodePage(int codePage) const override;
-	std::string UTF8FromEncoded(std::string_view encoded) const override;
-	std::string EncodedFromUTF8(std::string_view utf8) const override;
 public: 	// Public for scintilla_send_message
-	sptr_t WndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam) override;
+	sptr_t WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) override;
 private:
-	sptr_t DefWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam) override;
+	sptr_t DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) override;
 	struct TimeThunk {
 		TickReason reason;
 		ScintillaGTK *scintilla;
 		guint timer;
-		TimeThunk() noexcept : reason(TickReason::caret), scintilla(nullptr), timer(0) {}
+		TimeThunk() noexcept : reason(tickCaret), scintilla(nullptr), timer(0) {}
 	};
-	TimeThunk timers[static_cast<size_t>(TickReason::dwell)+1];
+	TimeThunk timers[tickDwell+1];
 	bool FineTickerRunning(TickReason reason) override;
 	void FineTickerStart(TickReason reason, int millis, int tolerance) override;
 	void FineTickerCancel(TickReason reason) override;
@@ -130,23 +111,21 @@ private:
 	bool HaveMouseCapture() override;
 	bool PaintContains(PRectangle rc) override;
 	void FullPaint();
-	void SetClientRectangle();
 	PRectangle GetClientRectangle() const override;
 	void ScrollText(Sci::Line linesToMove) override;
 	void SetVerticalScrollPos() override;
 	void SetHorizontalScrollPos() override;
 	bool ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) override;
 	void ReconfigureScrollBars() override;
-	void SetScrollBars() override;
 	void NotifyChange() override;
 	void NotifyFocus(bool focus) override;
-	void NotifyParent(Scintilla::NotificationData scn) override;
-	void NotifyKey(Scintilla::Keys key, Scintilla::KeyMod modifiers);
+	void NotifyParent(SCNotification scn) override;
+	void NotifyKey(int key, int modifiers);
 	void NotifyURIDropped(const char *list);
 	const char *CharacterSetID() const;
-	std::unique_ptr<CaseFolder> CaseFolderForEncoding() override;
-	std::string CaseMapString(const std::string &s, CaseMapping caseMapping) override;
-	int KeyDefault(Scintilla::Keys key, Scintilla::KeyMod modifiers) override;
+	CaseFolder *CaseFolderForEncoding() override;
+	std::string CaseMapString(const std::string &s, int caseMapping) override;
+	int KeyDefault(int key, int modifiers) override;
 	void CopyToClipboard(const SelectionText &selectedText) override;
 	void Copy() override;
 	void RequestSelection(GdkAtom atomSelection);
@@ -169,13 +148,9 @@ private:
 	static void ClipboardGetSelection(GtkClipboard *clip, GtkSelectionData *selection_data, guint info, void *data);
 	static void ClipboardClearSelection(GtkClipboard *clip, void *data);
 
-	void ClearPrimarySelection();
-	void PrimaryGetSelectionThis(GtkClipboard *clip, GtkSelectionData *selection_data, guint info);
-	static void PrimaryGetSelection(GtkClipboard *clip, GtkSelectionData *selection_data, guint info, gpointer pSci);
-	void PrimaryClearSelectionThis(GtkClipboard *clip);
-	static void PrimaryClearSelection(GtkClipboard *clip, gpointer pSci);
-
 	void UnclaimSelection(GdkEventSelection *selection_event);
+	static void PrimarySelection(GtkWidget *widget, GtkSelectionData *selection_data, guint info, guint time_stamp, ScintillaGTK *sciThis);
+	static gboolean PrimaryClear(GtkWidget *widget, GdkEventSelection *event, ScintillaGTK *sciThis);
 	void Resize(int width, int height);
 
 	// Callback functions
@@ -197,7 +172,6 @@ private:
 	static void GetPreferredHeight(GtkWidget *widget, gint *minimalHeight, gint *naturalHeight);
 #endif
 	static void SizeAllocate(GtkWidget *widget, GtkAllocation *allocation);
-	void CheckForFontOptionChange();
 #if GTK_CHECK_VERSION(3,0,0)
 	gboolean DrawTextThis(cairo_t *cr);
 	static gboolean DrawText(GtkWidget *widget, cairo_t *cr, ScintillaGTK *sciThis);
@@ -238,11 +212,8 @@ private:
 	void PreeditChangedInlineThis();
 	void PreeditChangedWindowedThis();
 	static void PreeditChanged(GtkIMContext *context, ScintillaGTK *sciThis);
-	bool RetrieveSurroundingThis(GtkIMContext *context);
-	static gboolean RetrieveSurrounding(GtkIMContext *context, ScintillaGTK *sciThis);
-	bool DeleteSurroundingThis(GtkIMContext *context, gint characterOffset, gint characterCount);
-	static gboolean DeleteSurrounding(GtkIMContext *context, gint characterOffset, gint characterCount,
-					  ScintillaGTK *sciThis);
+	void MoveImeCarets(int pos);
+	void DrawImeIndicator(int indicator, int len);
 	void SetCandidateWindowPos();
 
 	static void StyleSetText(GtkWidget *widget, GtkStyle *previous, void *);
@@ -270,7 +241,7 @@ private:
 	static gboolean IdleCallback(gpointer pSci);
 	static gboolean StyleIdle(gpointer pSci);
 	void IdleWork() override;
-	void QueueIdleWork(WorkItems items, Sci::Position upTo) override;
+	void QueueIdleWork(WorkNeeded::workItems items, Sci::Position upTo) override;
 	void SetDocPointer(Document *document) override;
 	static void PopUpCB(GtkMenuItem *menuItem, ScintillaGTK *sciThis);
 
@@ -283,15 +254,13 @@ private:
 
 	static sptr_t DirectFunction(sptr_t ptr,
 				     unsigned int iMessage, uptr_t wParam, sptr_t lParam);
-	static sptr_t DirectStatusFunction(sptr_t ptr,
-				     unsigned int iMessage, uptr_t wParam, sptr_t lParam, int *pStatus);
 };
 
 // helper class to watch a GObject lifetime and get notified when it dies
 class GObjectWatcher {
 	GObject *weakRef;
 
-	void WeakNotifyThis([[maybe_unused]] GObject *obj) {
+	void WeakNotifyThis(GObject *obj G_GNUC_UNUSED) {
 		PLATFORM_ASSERT(obj == weakRef);
 
 		Destroyed();

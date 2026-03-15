@@ -1,31 +1,22 @@
-// @file ScintillaDocument.cpp
+// ScintillaDocument.cpp
 // Wrapper for Scintilla document object so it can be manipulated independently.
 // Copyright (c) 2011 Archaeopteryx Software, Inc. d/b/a Wingware
-
-#include <cstdint>
 
 #include <stdexcept>
 #include <string_view>
 #include <vector>
 #include <map>
-#include <set>
-#include <optional>
 #include <memory>
 
-#include "ScintillaTypes.h"
-#include "ScintillaMessages.h"
-#include "ScintillaStructures.h"
 #include "ScintillaDocument.h"
 
-#include "Debugging.h"
-#include "Geometry.h"
 #include "Platform.h"
 
 #include "ILoader.h"
 #include "ILexer.h"
 #include "Scintilla.h"
 
-#include "CharacterCategoryMap.h"
+#include "CharacterCategory.h"
 #include "Position.h"
 #include "UniqueString.h"
 #include "SplitVector.h"
@@ -44,23 +35,26 @@
 #include "Document.h"
 
 using namespace Scintilla;
-using namespace Scintilla::Internal;
 
 class WatcherHelper : public DocWatcher {
     ScintillaDocument *owner;
 public:
     explicit WatcherHelper(ScintillaDocument *owner_);
+    virtual ~WatcherHelper();
 
     void NotifyModifyAttempt(Document *doc, void *userData) override;
     void NotifySavePoint(Document *doc, void *userData, bool atSavePoint) override;
     void NotifyModified(Document *doc, DocModification mh, void *userData) override;
     void NotifyDeleted(Document *doc, void *userData) noexcept override;
     void NotifyStyleNeeded(Document *doc, void *userData, Sci::Position endPos) override;
-    void NotifyErrorOccurred(Document *doc, void *userData, Status status) override;
-    void NotifyGroupCompleted(Document *doc, void *userData) noexcept override;
+    void NotifyLexerChanged(Document *doc, void *userData) override;
+    void NotifyErrorOccurred(Document *doc, void *userData, int status) override;
 };
 
 WatcherHelper::WatcherHelper(ScintillaDocument *owner_) : owner(owner_) {
+}
+
+WatcherHelper::~WatcherHelper() {
 }
 
 void WatcherHelper::NotifyModifyAttempt(Document *, void *) {
@@ -76,8 +70,8 @@ void WatcherHelper::NotifyModified(Document *, DocModification mh, void *) {
     if (!mh.text)
         length = 0;
     QByteArray ba = QByteArray::fromRawData(mh.text, length);
-    emit owner->modified(mh.position, static_cast<int>(mh.modificationType), ba, length,
-			 mh.linesAdded, mh.line, static_cast<int>(mh.foldLevelNow), static_cast<int>(mh.foldLevelPrev));
+    emit owner->modified(mh.position, mh.modificationType, ba, length,
+                         mh.linesAdded, mh.line, mh.foldLevelNow, mh.foldLevelPrev);
 }
 
 void WatcherHelper::NotifyDeleted(Document *, void *) noexcept {
@@ -87,23 +81,22 @@ void WatcherHelper::NotifyStyleNeeded(Document *, void *, Sci::Position endPos) 
     emit owner->style_needed(endPos);
 }
 
-void WatcherHelper::NotifyErrorOccurred(Document *, void *, Status status) {
-    emit owner->error_occurred(static_cast<int>(status));
+void WatcherHelper::NotifyLexerChanged(Document *, void *) {
+    emit owner->lexer_changed();
 }
 
-void WatcherHelper::NotifyGroupCompleted(Document *, void *) noexcept {
-    // Needed to satisfy protocol. May implement an event in future.
+void WatcherHelper::NotifyErrorOccurred(Document *, void *, int status) {
+    emit owner->error_occurred(status);
 }
 
 ScintillaDocument::ScintillaDocument(QObject *parent, void *pdoc_) :
-    QObject(parent), pdoc(static_cast<Scintilla::IDocumentEditable *>(pdoc_)), docWatcher(nullptr) {
+    QObject(parent), pdoc(pdoc_), docWatcher(nullptr) {
     if (!pdoc) {
-	pdoc = new Document(DocumentOption::Default);
+        pdoc = new Document(SC_DOCUMENTOPTION_DEFAULT);
     }
     docWatcher = new WatcherHelper(this);
-    Document *doc = static_cast<Document *>(pdoc);
-    doc->AddRef();
-    doc->AddWatcher(docWatcher, doc);
+    (static_cast<Document *>(pdoc))->AddRef();
+    (static_cast<Document *>(pdoc))->AddWatcher(docWatcher, pdoc);
 }
 
 ScintillaDocument::~ScintillaDocument() {
@@ -117,15 +110,15 @@ ScintillaDocument::~ScintillaDocument() {
     docWatcher = nullptr;
 }
 
-void *ScintillaDocument::pointer() const {
+void *ScintillaDocument::pointer() {
     return pdoc;
 }
 
-int ScintillaDocument::line_from_position(int pos) const {
+int ScintillaDocument::line_from_position(int pos) {
     return (static_cast<Document *>(pdoc))->LineFromPosition(pos);
 }
 
-bool ScintillaDocument::is_cr_lf(int pos) const {
+bool ScintillaDocument::is_cr_lf(int pos) {
     return (static_cast<Document *>(pdoc))->IsCrLf(pos);
 }
 
@@ -141,11 +134,11 @@ int ScintillaDocument::redo() {
     return (static_cast<Document *>(pdoc))->Redo();
 }
 
-bool ScintillaDocument::can_undo() const {
+bool ScintillaDocument::can_undo() {
     return (static_cast<Document *>(pdoc))->CanUndo();
 }
 
-bool ScintillaDocument::can_redo() const {
+bool ScintillaDocument::can_redo() {
     return (static_cast<Document *>(pdoc))->CanRedo();
 }
 
@@ -157,12 +150,12 @@ bool ScintillaDocument::set_undo_collection(bool collect_undo) {
     return (static_cast<Document *>(pdoc))->SetUndoCollection(collect_undo);
 }
 
-bool ScintillaDocument::is_collecting_undo() const {
+bool ScintillaDocument::is_collecting_undo() {
     return (static_cast<Document *>(pdoc))->IsCollectingUndo();
 }
 
-void ScintillaDocument::begin_undo_action(bool coalesceWithPrior) {
-    (static_cast<Document *>(pdoc))->BeginUndoAction(coalesceWithPrior);
+void ScintillaDocument::begin_undo_action() {
+    (static_cast<Document *>(pdoc))->BeginUndoAction();
 }
 
 void ScintillaDocument::end_undo_action() {
@@ -173,7 +166,7 @@ void ScintillaDocument::set_save_point() {
     (static_cast<Document *>(pdoc))->SetSavePoint();
 }
 
-bool ScintillaDocument::is_save_point() const {
+bool ScintillaDocument::is_save_point() {
     return (static_cast<Document *>(pdoc))->IsSavePoint();
 }
 
@@ -181,16 +174,16 @@ void ScintillaDocument::set_read_only(bool read_only) {
     (static_cast<Document *>(pdoc))->SetReadOnly(read_only);
 }
 
-bool ScintillaDocument::is_read_only() const {
+bool ScintillaDocument::is_read_only() {
     return (static_cast<Document *>(pdoc))->IsReadOnly();
 }
 
-void ScintillaDocument::insert_string(int position, const QByteArray &str) {
+void ScintillaDocument::insert_string(int position, QByteArray &str) {
     (static_cast<Document *>(pdoc))->InsertString(position, str.data(), str.size());
 }
 
-QByteArray ScintillaDocument::get_char_range(int position, int length) const {
-    const Document *doc = static_cast<Document *>(pdoc);
+QByteArray ScintillaDocument::get_char_range(int position, int length) {
+    Document *doc = static_cast<Document *>(pdoc);
 
     if (position < 0 || length <= 0 || position + length > doc->Length())
         return QByteArray();
@@ -200,27 +193,27 @@ QByteArray ScintillaDocument::get_char_range(int position, int length) const {
     return ba;
 }
 
-char ScintillaDocument::style_at(int position) const {
+char ScintillaDocument::style_at(int position) {
     return (static_cast<Document *>(pdoc))->StyleAt(position);
 }
 
-int ScintillaDocument::line_start(int lineno) const {
+int ScintillaDocument::line_start(int lineno) {
     return (static_cast<Document *>(pdoc))->LineStart(lineno);
 }
 
-int ScintillaDocument::line_end(int lineno) const {
+int ScintillaDocument::line_end(int lineno) {
     return (static_cast<Document *>(pdoc))->LineEnd(lineno);
 }
 
-int ScintillaDocument::line_end_position(int pos) const {
+int ScintillaDocument::line_end_position(int pos) {
     return (static_cast<Document *>(pdoc))->LineEndPosition(pos);
 }
 
-int ScintillaDocument::length() const {
+int ScintillaDocument::length() {
     return (static_cast<Document *>(pdoc))->Length();
 }
 
-int ScintillaDocument::lines_total() const {
+int ScintillaDocument::lines_total() {
     return (static_cast<Document *>(pdoc))->LinesTotal();
 }
 
@@ -232,7 +225,7 @@ bool ScintillaDocument::set_style_for(int length, char style) {
     return (static_cast<Document *>(pdoc))->SetStyleFor(length, style);
 }
 
-int ScintillaDocument::get_end_styled() const {
+int ScintillaDocument::get_end_styled() {
     return (static_cast<Document *>(pdoc))->GetEndStyled();
 }
 
@@ -260,7 +253,7 @@ int ScintillaDocument::decorations_end(int indic, int position) {
     return (static_cast<Document *>(pdoc))->decorations->End(indic, position);
 }
 
-int ScintillaDocument::get_code_page() const {
+int ScintillaDocument::get_code_page() {
     return (static_cast<Document *>(pdoc))->CodePage();
 }
 
@@ -268,18 +261,18 @@ void ScintillaDocument::set_code_page(int code_page) {
     (static_cast<Document *>(pdoc))->dbcsCodePage = code_page;
 }
 
-int ScintillaDocument::get_eol_mode() const {
-    return static_cast<int>((static_cast<Document *>(pdoc))->eolMode);
+int ScintillaDocument::get_eol_mode() {
+    return (static_cast<Document *>(pdoc))->eolMode;
 }
 
 void ScintillaDocument::set_eol_mode(int eol_mode) {
-    (static_cast<Document *>(pdoc))->eolMode = static_cast<EndOfLine>(eol_mode);
+    (static_cast<Document *>(pdoc))->eolMode = eol_mode;
 }
 
 int ScintillaDocument::move_position_outside_char(int pos, int move_dir, bool check_line_end) {
     return (static_cast<Document *>(pdoc))->MovePositionOutsideChar(pos, move_dir, check_line_end);
 }
 
-int ScintillaDocument::get_character(int pos) const {
+int ScintillaDocument::get_character(int pos) {
     return (static_cast<Document *>(pdoc))->GetCharacterAndWidth(pos, nullptr);
 }
