@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11605.240 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScintillaNET", "ScintillaNET\ScintillaNET.csproj", "{22AE2386-60F1-476E-9303-61CDB0AAC4CF}"
 EndProject
@@ -14,16 +14,25 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM64 = Debug|ARM64
 		Release|Any CPU = Release|Any CPU
+		Release|ARM64 = Release|ARM64
 		Signed|Any CPU = Signed|Any CPU
+		Signed|ARM64 = Signed|ARM64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Debug|ARM64.Build.0 = Debug|ARM64
 		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Release|ARM64.ActiveCfg = Release|ARM64
+		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Release|ARM64.Build.0 = Release|ARM64
 		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Signed|Any CPU.Build.0 = Signed|Any CPU
+		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Signed|ARM64.ActiveCfg = Signed|ARM64
+		{22AE2386-60F1-476E-9303-61CDB0AAC4CF}.Signed|ARM64.Build.0 = Signed|ARM64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
