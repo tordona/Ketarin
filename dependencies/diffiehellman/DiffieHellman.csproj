@@ -98,6 +98,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\mono\BigInteger.cs" />
     <Compile Include="src\mono\ConfidenceFactor.cs" />
     <Compile Include="src\mono\MiniParser.cs" />
