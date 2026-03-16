@@ -126,7 +126,7 @@ namespace Ketarin.Forms
             // chkUpdateAtStartup
             // 
             this.chkUpdateAtStartup.AutoSize = true;
-            this.chkUpdateAtStartup.Location = new System.Drawing.Point(8, 11);
+            this.chkUpdateAtStartup.Location = new System.Drawing.Point(9, 11);
             this.chkUpdateAtStartup.Name = "chkUpdateAtStartup";
             this.chkUpdateAtStartup.Size = new System.Drawing.Size(188, 17);
             this.chkUpdateAtStartup.TabIndex = 0;
@@ -136,7 +136,7 @@ namespace Ketarin.Forms
             // chkAvoidBeta
             // 
             this.chkAvoidBeta.AutoSize = true;
-            this.chkAvoidBeta.Location = new System.Drawing.Point(8, 34);
+            this.chkAvoidBeta.Location = new System.Drawing.Point(9, 34);
             this.chkAvoidBeta.Name = "chkAvoidBeta";
             this.chkAvoidBeta.Size = new System.Drawing.Size(196, 17);
             this.chkAvoidBeta.TabIndex = 1;
@@ -363,7 +363,7 @@ namespace Ketarin.Forms
             this.chkAvoidNonBinary.AutoSize = true;
             this.chkAvoidNonBinary.Checked = true;
             this.chkAvoidNonBinary.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAvoidNonBinary.Location = new System.Drawing.Point(8, 57);
+            this.chkAvoidNonBinary.Location = new System.Drawing.Point(9, 57);
             this.chkAvoidNonBinary.Name = "chkAvoidNonBinary";
             this.chkAvoidNonBinary.Size = new System.Drawing.Size(333, 17);
             this.chkAvoidNonBinary.TabIndex = 2;
@@ -386,9 +386,9 @@ namespace Ketarin.Forms
             // 
             this.separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.separator1.Location = new System.Drawing.Point(6, 170);
+            this.separator1.Location = new System.Drawing.Point(6, 146);
             this.separator1.Name = "separator1";
-            this.separator1.Size = new System.Drawing.Size(382, 23);
+            this.separator1.Size = new System.Drawing.Size(378, 23);
             this.separator1.TabIndex = 7;
             this.separator1.Text = "Custom columns";
             // 
@@ -434,10 +434,10 @@ namespace Ketarin.Forms
             this.olvCustomColumns.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.olvCustomColumns.LastSortColumn = null;
             this.olvCustomColumns.LastSortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvCustomColumns.Location = new System.Drawing.Point(9, 196);
+            this.olvCustomColumns.Location = new System.Drawing.Point(9, 172);
             this.olvCustomColumns.Name = "olvCustomColumns";
             this.olvCustomColumns.ShowGroups = false;
-            this.olvCustomColumns.Size = new System.Drawing.Size(379, 130);
+            this.olvCustomColumns.Size = new System.Drawing.Size(375, 154);
             this.olvCustomColumns.TabIndex = 8;
             this.olvCustomColumns.UseCompatibleStateImageBehavior = false;
             this.olvCustomColumns.View = System.Windows.Forms.View.Details;
@@ -461,42 +461,43 @@ namespace Ketarin.Forms
             // chkOpenWebsite
             // 
             this.chkOpenWebsite.AutoSize = true;
-            this.chkOpenWebsite.Location = new System.Drawing.Point(8, 149);
+            this.chkOpenWebsite.Location = new System.Drawing.Point(8, 126);
             this.chkOpenWebsite.Name = "chkOpenWebsite";
             this.chkOpenWebsite.Size = new System.Drawing.Size(355, 17);
-            this.chkOpenWebsite.TabIndex = 6;
+            this.chkOpenWebsite.TabIndex = 5;
             this.chkOpenWebsite.Text = "Ope&n website when double-clicking an application (if specified)";
             this.chkOpenWebsite.UseVisualStyleBackColor = true;
             // 
             // chkBackups
             // 
             this.chkBackups.AutoSize = true;
-            this.chkBackups.Location = new System.Drawing.Point(8, 126);
+            this.chkBackups.Location = new System.Drawing.Point(9, 103);
             this.chkBackups.Name = "chkBackups";
             this.chkBackups.Size = new System.Drawing.Size(225, 17);
-            this.chkBackups.TabIndex = 5;
+            this.chkBackups.TabIndex = 4;
             this.chkBackups.Text = "A&utomatically create database backups";
             this.chkBackups.UseVisualStyleBackColor = true;
             // 
             // chkMinToTray
             // 
             this.chkMinToTray.AutoSize = true;
-            this.chkMinToTray.Location = new System.Drawing.Point(8, 103);
+            this.chkMinToTray.Location = new System.Drawing.Point(9, 80);
             this.chkMinToTray.Name = "chkMinToTray";
             this.chkMinToTray.Size = new System.Drawing.Size(108, 17);
-            this.chkMinToTray.TabIndex = 4;
+            this.chkMinToTray.TabIndex = 3;
             this.chkMinToTray.Text = "&Minimize to tray";
             this.chkMinToTray.UseVisualStyleBackColor = true;
             // 
             // chkUpdateOnlineDatabase
             // 
-            this.chkUpdateOnlineDatabase.AutoSize = true;
-            this.chkUpdateOnlineDatabase.Location = new System.Drawing.Point(8, 80);
+            this.chkUpdateOnlineDatabase.Enabled = false;
+            this.chkUpdateOnlineDatabase.Location = new System.Drawing.Point(9, 149);
             this.chkUpdateOnlineDatabase.Name = "chkUpdateOnlineDatabase";
-            this.chkUpdateOnlineDatabase.Size = new System.Drawing.Size(239, 17);
-            this.chkUpdateOnlineDatabase.TabIndex = 3;
+            this.chkUpdateOnlineDatabase.Size = new System.Drawing.Size(239, 0);
+            this.chkUpdateOnlineDatabase.TabIndex = 20;
             this.chkUpdateOnlineDatabase.Text = "&Check for updates in the online database";
             this.chkUpdateOnlineDatabase.UseVisualStyleBackColor = true;
+            this.chkUpdateOnlineDatabase.Visible = false;
             // 
             // tpConnection
             // 
