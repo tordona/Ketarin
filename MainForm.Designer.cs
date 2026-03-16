@@ -441,6 +441,7 @@
             this.cmnuImportOnline.Index = 2;
             this.cmnuImportOnline.Text = "I&mport from online database...";
             this.cmnuImportOnline.Click += new System.EventHandler(this.cmnuImportOnline_Click);
+            this.cmnuImportOnline.Visible = false;
             // 
             // olvJobs
             // 
